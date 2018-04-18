@@ -26,6 +26,7 @@ import java.net.URLEncoder;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    private UserRegTask regTask = null;
     private Button btnRegister;
     private Button btnLinkToLogin;
     private EditText inputEmail;
@@ -47,7 +48,8 @@ public class RegisterActivity extends AppCompatActivity {
                 String password = inputPassword.getText().toString().trim();
                 if (!email.isEmpty() && !password.isEmpty() && email.contains("@") && password.length() > 5) {
                     Toast.makeText(getApplicationContext(), "Working", Toast.LENGTH_LONG).show();
-                    new UserRegTask(email, password);
+                    regTask = new UserRegTask(email, password);
+                    regTask.execute((Void)null);
                 } else {
                     Toast.makeText(getApplicationContext(), "Please enter all fields.", Toast.LENGTH_LONG).show();
                 }

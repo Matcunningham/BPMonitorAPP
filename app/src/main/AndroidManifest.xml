@@ -25,10 +25,10 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_login" />
-        <activity
-            android:name=".RegisterActivity">
-
-        </activity>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".ViewMedSchedule" />
+        <activity android:name=".ViewBPHistory" />
+        <activity android:name=".ViewMedHistory"></activity>
     </application>
 
 </manifest>

@@ -8,6 +8,8 @@ public class AppConfig {
     // Server user login/register url
     public static final String URL_LOGIN = "http://bpmon.heliohost.org/login.php";
     public static final String URL_REGISTER = "http://bpmon.heliohost.org/register.php";
+    public static final String URL_ISDOCTOR = "http://bpmon.heliohost.org/checkDoctor.php";
+    public static final String URL_BPHIST   = "http://bpmon.heliohost.org/bpHist.php";
 
     //JSON TAGS
     public static final String pidTag = "pid";

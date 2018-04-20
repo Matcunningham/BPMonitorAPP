@@ -23,6 +23,8 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -60,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-
+    SessionManager sesh;
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -72,17 +74,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private Button btnLinkToRegister;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        sesh = new SessionManager(getApplicationContext());
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        mEmailView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                populateAutoComplete();
+            }
+        });
+        //populateAutoComplete();
 
-        btnLinkToRegister = (Button) findViewById(R.id.btnLinkToRegScreen);
+        Button btnLinkToRegister = findViewById(R.id.btnLinkToRegScreen);
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -104,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        Button mEmailSignInButton = (Button) findViewById(R.id.btnLogin);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -384,6 +395,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 else {
                     int pid = json.getInt(AppConfig.pidTag);
                     Toast.makeText(getApplicationContext(), "USER: " + pid, Toast.LENGTH_LONG).show();
+                    sesh.createLoginSession(pid); // Stores user in shared preferences
                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(i);
                     finish();

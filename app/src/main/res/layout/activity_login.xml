@@ -39,10 +39,14 @@
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_email"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/white"
+                    android:hint="@string/hint_email"
                     android:inputType="textEmailAddress"
+                    android:padding="10dp"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textColorHint="@color/input_login_hint"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -52,26 +56,27 @@
 
                 <EditText
                     android:id="@+id/password"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
-                    android:imeActionId="6"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/white"
+                    android:hint="@string/hint_password"
                     android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColor="@color/input_login"
+                    android:textColorHint="@color/input_login_hint" />
 
             </android.support.design.widget.TextInputLayout>
 
             <Button
-                android:id="@+id/email_sign_in_button"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
+                android:id="@+id/btnLogin"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
-                android:textStyle="bold" />
+                android:layout_marginTop="20dip"
+                android:background="@color/btn_login_bg"
+                android:text="@string/btn_login"
+                android:textColor="@color/btn_login" />
 
             <Button
                 android:id="@+id/btnLinkToRegScreen"

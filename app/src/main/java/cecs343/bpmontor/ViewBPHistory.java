@@ -2,11 +2,13 @@ package cecs343.bpmontor;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -30,8 +32,8 @@ public class ViewBPHistory extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private BpRvAdapter mAdapter;
-    SessionManager sesh;
-    int patientId;
+    private SessionManager sesh;
+    private int patientId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +47,21 @@ public class ViewBPHistory extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mAdapter = new BpRvAdapter();
+        mAdapter = new BpRvAdapter(R.layout.bp_list_item);
         mRecyclerView.setAdapter(mAdapter);
 
         new BpQueryTask().execute();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public class BpQueryTask extends AsyncTask<Void, Void, String>{
@@ -92,6 +105,7 @@ public class ViewBPHistory extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final String result) {
+            String tabSep = "\t\t\t\t\t\t\t\t\t";
             Toast.makeText(getApplicationContext(), "working...", Toast.LENGTH_SHORT).show();
             try {
                 JSONArray json = new JSONArray(result);
@@ -101,11 +115,10 @@ public class ViewBPHistory extends AppCompatActivity {
                     for(int i = 0; i < json.length(); i++)
                     {
                         JSONObject row = json.getJSONObject(i);
-                        data[i] = row.getString(AppConfig.dateTag) + "\t" + row.getString(AppConfig.timeTag) + "\t" +
-                                row.getString(AppConfig.sysTag) + "\t" + row.getString(AppConfig.diaTag);
+                        data[i] = row.getString(AppConfig.dateTag) + tabSep + row.getString(AppConfig.timeTag) +
+                                tabSep + row.getString(AppConfig.sysTag) + "\t/\t" + row.getString(AppConfig.diaTag);
 
 
-                        Toast.makeText(getApplicationContext(), data[0], Toast.LENGTH_LONG).show();
                     }
                     mAdapter.setBpData(data);
 

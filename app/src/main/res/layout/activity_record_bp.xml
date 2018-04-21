@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cecs343.bpmontor.RecordBp">
+
+    <Button
+        android:id="@+id/date_select"
+        android:layout_width="368dp"
+        android:layout_height="74dp"
+        android:layout_marginBottom="8dp"
+        android:onClick="showDatePickerDialog"
+        android:text="@string/date_select"
+        app:layout_constraintBottom_toTopOf="@+id/time_select"
+        app:layout_constraintStart_toStartOf="@+id/time_select" />
+
+
+    <Button
+        android:id="@+id/time_select"
+        android:layout_width="368dp"
+        android:layout_height="74dp"
+        android:layout_marginEnd="8dp"
+        android:onClick="showTimePickerDialog"
+        android:text="Select Time"
+        app:layout_constraintBottom_toTopOf="@id/date_select"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/sys"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:inputType="numberSigned"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time_select" />
+
+    <TextView
+        android:id="@+id/slash"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="72dp"
+        android:gravity="center"
+        android:text=" /"
+        android:textSize="100dp"
+        app:layout_constraintHorizontal_bias="0.31"
+        app:layout_constraintLeft_toLeftOf="@id/dia"
+        app:layout_constraintRight_toLeftOf="@id/sys"
+        app:layout_constraintTop_toBottomOf="@+id/time_select" />
+
+    <EditText
+        android:id="@+id/dia"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:inputType="numberSigned"
+        android:layout_marginEnd="60dp"
+        android:layout_marginTop="92dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time_select" />
+
+    <Button
+        android:id="@+id/record_bp_in_db"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Record Entry NOW"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

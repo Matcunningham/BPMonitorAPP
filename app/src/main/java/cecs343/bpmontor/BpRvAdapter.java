@@ -14,8 +14,11 @@ import android.widget.TextView;
 
 public class BpRvAdapter extends RecyclerView.Adapter<BpRvAdapter.ItemViewHolder> {
     private String[] dataSet;
+    private int listItem;
 
-    public BpRvAdapter(){}
+    public BpRvAdapter(int layoutID){
+        listItem = layoutID;
+    }
 
     @Override
     public int getItemCount(){
@@ -28,7 +31,7 @@ public class BpRvAdapter extends RecyclerView.Adapter<BpRvAdapter.ItemViewHolder
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType){
         Context context = viewGroup.getContext();
-        int layoutIdforListItem = R.layout.bp_list_item;
+        int layoutIdforListItem = listItem; //R.layout.bp_list_item;
         LayoutInflater inflater = LayoutInflater.from(context);
         //boolean shouldAttatchToParentImmediately = false;
 

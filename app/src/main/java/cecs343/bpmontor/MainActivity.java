@@ -8,7 +8,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    SessionManager sesh;
+    SessionManager sesh; // TODO: May need these for doctor implimentation
     int patientId;
 
 
@@ -17,18 +17,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sesh = new SessionManager(getApplicationContext());
+        sesh.checkLogin();
         patientId = sesh.getPid();
 
         Button viewMedSched = findViewById(R.id.view_med_sched);
         Button viewMedHist =  findViewById(R.id.view_med_hist);
         Button viewBpHist =  findViewById(R.id.view_bp_hist);
+        Button recordBp =  findViewById(R.id.record_bp);
+        Button recordMeds =  findViewById(R.id.record_meds);
+
+        Button logout = findViewById(R.id.logout);
 
         viewMedSched.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), ViewMedSchedule.class);
                 startActivity(i);
-                finish();
             }
         });
 
@@ -37,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), ViewMedHistory.class);
                 startActivity(i);
-                finish();
             }
         });
 
@@ -46,7 +49,29 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), ViewBPHistory.class);
                 startActivity(i);
-                finish();
+            }
+        });
+
+        recordBp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), RecordBp.class);
+                startActivity(i);
+            }
+        });
+
+        recordMeds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), RecordMed.class);
+                startActivity(i);
+            }
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sesh.logoutUser();
             }
         });
     }

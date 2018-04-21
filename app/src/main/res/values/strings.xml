@@ -24,5 +24,8 @@
     <string name="view_med_hist">View Medication History</string>
     <string name="view_bp_hist">View Blood Pressure History</string>
     <string name="view_med_sched">View Medication Schedule</string>
+    <string name="record_bp">Record Blood Pressure</string>
+    <string name="record_med">Record Taken Medication</string>
 
+    <string name="date_select">Select Date</string>
 </resources>

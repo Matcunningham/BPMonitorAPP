@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <activity
+            android:name=".RegisterActivity" />
+
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,10 +29,9 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/welcome" />
+            android:label="@string/welcome"
+            android:launchMode="singleTop"/>
 
-        <activity
-            android:name=".RegisterActivity" />
 
         <activity
             android:name=".ViewMedSchedule"

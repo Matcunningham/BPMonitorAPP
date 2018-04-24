@@ -107,7 +107,7 @@ public class RecordBp extends AppCompatActivity {
             int day = cal.get(Calendar.DAY_OF_MONTH);
 
             // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), this, year, month, day);
+            return new DatePickerDialog(getActivity(), DatePickerDialog.THEME_HOLO_DARK, this, year, month, day);
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {

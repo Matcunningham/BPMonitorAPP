@@ -13,6 +13,7 @@ public class AppConfig {
     public static final String URL_MEDHIST = "http://bpmon.heliohost.org/medHist.php";
     public static final String URL_MEDSCHED = "http://bpmon.heliohost.org/medSched.php";
     public static final String URL_RECBP   = "http://bpmon.heliohost.org/recordBp.php";
+    public static final String URL_RECMED   = "http://bpmon.heliohost.org/recordMed.php";
 
     //JSON TAGS
     public static final String pidTag = "pid";

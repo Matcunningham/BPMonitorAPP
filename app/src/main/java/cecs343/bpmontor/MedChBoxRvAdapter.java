@@ -19,9 +19,10 @@ import java.util.List;
 
 public class MedChBoxRvAdapter extends RecyclerView.Adapter<MedChBoxRvAdapter.ItemViewHolder> {
 
-    private List<String> dataSet;
+    private String[] dataSet;
+    public List<String> medsSelected;
 
-    private OnItemCheckListener onItemCheckListener;
+    private OnItemCheckListener onItemClick;
 
     interface OnItemCheckListener {
         void onItemCheck(String med);
@@ -29,6 +30,8 @@ public class MedChBoxRvAdapter extends RecyclerView.Adapter<MedChBoxRvAdapter.It
     }
 
     public MedChBoxRvAdapter(List<String> meds, OnItemCheckListener onItemCheckListener){
+        this.medsSelected = meds;
+        this.onItemClick = onItemCheckListener;
 
     }
 
@@ -37,7 +40,7 @@ public class MedChBoxRvAdapter extends RecyclerView.Adapter<MedChBoxRvAdapter.It
         if(dataSet == null){
             return 0;
         }
-        return dataSet.size();
+        return dataSet.length; //size();
     }
 
     @Override
@@ -52,20 +55,29 @@ public class MedChBoxRvAdapter extends RecyclerView.Adapter<MedChBoxRvAdapter.It
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
-        String dataElem = dataSet.get(position);
+        String dataElem = dataSet[position]; //.get(position);
         holder.medCheckItemView.setText(dataElem);
 
-        holder.check.setChecked(dataSet.get(position);
-        holder.check.setTag(dataSet.get(position));
+        //holder.check.setChecked(dataSet.get(position));
+        holder.check.setTag(dataSet[position]); //.get(position));
 
         holder.check.setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
             CheckBox cb = (CheckBox) v;
             String med = (String) cb.getTag();
             // TODO ^ <> return a string with the value so i can query database
-            Intent i = new Intent("custom-message");
+            //Intent i = new Intent("custom-message");
             //https://stackoverflow.com/questions/33434626/get-list-of-checked-checkboxes-from-recyclerview-android
+            if(((CheckBox) v).isChecked())
+            {
+                onItemClick.onItemCheck(med);
+
             }
+            else
+            {
+                onItemClick.onItemUncheck(med);
+            }
+        }
         });
     }
 
@@ -82,7 +94,7 @@ public class MedChBoxRvAdapter extends RecyclerView.Adapter<MedChBoxRvAdapter.It
 
     }
 
-    public void setBpData(List<String> data)
+    public void setBpData(String[] data)
     {
         dataSet = data;
         notifyDataSetChanged();

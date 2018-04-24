@@ -37,16 +37,18 @@
             android:id="@+id/time_select_recmed"
             android:layout_width="368dp"
             android:layout_height="74dp"
-            android:layout_above="@+id/button3"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/record_med_btn"
             android:layout_alignStart="@+id/date_select_recmed"
             android:layout_marginBottom="12dp"
             android:onClick="showTimePickerDialog"
             android:text="Select Time" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/record_med_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="30dp"

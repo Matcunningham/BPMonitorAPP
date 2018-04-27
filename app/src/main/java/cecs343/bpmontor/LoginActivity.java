@@ -45,6 +45,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 import org.json.JSONException;
@@ -130,6 +131,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
+
 
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
@@ -398,6 +400,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
                 else {
                     int pid = json.getInt(AppConfig.pidTag);
+                    new SessionManager.CheckDoctorTask(pid).execute().get(); // Get makes the background task finish before continuing
                     Toast.makeText(getApplicationContext(), "USER: " + pid, Toast.LENGTH_LONG).show();
                     sesh.createLoginSession(pid); // Stores user in shared preferences
                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
@@ -405,6 +408,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     finish();
                 }
             } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
                 e.printStackTrace();
             }
 

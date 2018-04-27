@@ -6,19 +6,17 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- To connect to database-->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_bpicon"
         android:label="BP Monitor"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity
-            android:name=".RegisterActivity" />
-
+        <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,33 +24,37 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:label="@string/welcome"
-            android:launchMode="singleTop"/>
-
-
+            android:launchMode="singleTop" />
         <activity
             android:name=".ViewMedSchedule"
-            android:parentActivityName=".MainActivity"/>
-
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ViewBPHistory"
-            android:parentActivityName=".MainActivity"/>
-
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ViewMedHistory"
             android:parentActivityName=".MainActivity" />
-
         <activity
             android:name=".RecordMed"
-            android:parentActivityName=".MainActivity"/>
-
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".RecordBp"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".SelectPatient"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".UpdateSchedule"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".DeleteMeds"
             android:parentActivityName=".MainActivity"/>
-
+        <activity
+            android:name=".AddMed"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

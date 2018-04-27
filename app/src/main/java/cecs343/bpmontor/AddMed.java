@@ -1,22 +1,18 @@
 package cecs343.bpmontor;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -37,36 +33,31 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Calendar;
 
-public class RecordBp extends AppCompatActivity {
+public class AddMed extends AppCompatActivity {
 
     private SessionManager sesh;
-    private int patientId;
-    private static String date;
-    private static String time;
-    private String sys;
-    private String dia;
+    private int selectedPatient;
+    private String newMed;
+    private static String medTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_record_bp);
+        setContentView(R.layout.activity_add_med);
+
         sesh = new SessionManager(getApplicationContext());
         sesh.checkLogin();
-        patientId = sesh.getPid();
+        selectedPatient = sesh.getCurrentPat();
 
-        Button datePick = findViewById(R.id.date_select);
-        Button timePick = findViewById(R.id.time_select);
-        final EditText etSys = findViewById(R.id.sys);
-        final EditText etDia = findViewById(R.id.dia);
-        Button record = findViewById(R.id.record_bp_in_db);
+        final EditText etMed = findViewById(R.id.etnew_med);
+        Button timePick = findViewById(R.id.time_select_newmed);
+        Button addMed = findViewById(R.id.record_newmed_btn);
 
-
-        record.setOnClickListener(new View.OnClickListener() {
+        addMed.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                sys = etSys.getText().toString().trim();
-                dia = etDia.getText().toString().trim();
-                new InsertBpTask(patientId).execute();
+                newMed = etMed.getText().toString().trim();
+                new InsertMedTask().execute();
             }
         });
     }
@@ -82,53 +73,10 @@ public class RecordBp extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
-        FragmentManager fragMan = getFragmentManager();
-        newFragment.show(fragMan, "datePicker");
-    }
-
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         FragmentManager fragMan = getFragmentManager();
-        newFragment.show(fragMan, "timePicker");
-    }
-
-    public static class DatePickerFragment extends DialogFragment
-            implements DatePickerDialog.OnDateSetListener {
-
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            final Calendar cal = Calendar.getInstance();
-            int year = cal.get(Calendar.YEAR);
-            int month = cal.get(Calendar.MONTH);
-            int day = cal.get(Calendar.DAY_OF_MONTH);
-
-            // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), DatePickerDialog.THEME_HOLO_DARK, this, year, month, day);
-        }
-
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            // Do something with the date chosen by the user
-            month = month + 1;
-            String mth;
-            String dy;
-            if (month < 10) {
-                mth = "-0" + String.valueOf(month) + "-";
-            } else {
-                mth = "-" + String.valueOf(month) + "-";
-            }
-            if (day < 10) {
-                dy = "0" + String.valueOf(day);
-            } else {
-                dy = String.valueOf(day);
-            }
-
-            date = String.valueOf(year) + mth + dy;
-            //Toast.makeText(getActivity(), date, Toast.LENGTH_LONG).show();
-        }
+        newFragment.show(fragMan, "timePickerAdd");
     }
 
     public static class TimePickerFragment extends DialogFragment
@@ -160,37 +108,26 @@ public class RecordBp extends AppCompatActivity {
             } else {
                 min = String.valueOf(minute);
             }
-            time = hr + min + ":00";
-            Toast.makeText(getActivity(), time, Toast.LENGTH_LONG).show();
+            medTime = hr + min +":00";
+            Toast.makeText(getActivity(), medTime, Toast.LENGTH_LONG).show();
         }
     }
 
-    public class InsertBpTask extends AsyncTask<Void, Void, String> {
-
-        private final int id;
-
-        InsertBpTask(int pid)
-        {
-            id = pid;
-        }
+    public class InsertMedTask extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
             try {
-                URL url = new URL(AppConfig.URL_RECBP);
+                URL url = new URL(AppConfig.URL_ADDMED);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setDoOutput(true);
                 httpURLConnection.setDoInput(true);
                 OutputStream outStream = httpURLConnection.getOutputStream();
                 BufferedWriter bfWriter = new BufferedWriter(new OutputStreamWriter(outStream, "UTF-8"));
-                String postData = URLEncoder.encode("pid", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(id), "UTF-8") + "&"
-                        + URLEncoder.encode("dte", "UTF-8") + "=" + URLEncoder.encode(date, "UTF-8") + "&"
-                        + URLEncoder.encode("tim", "UTF-8") + "=" + URLEncoder.encode(time, "UTF-8") + "&"
-                        + URLEncoder.encode("sys", "UTF-8") + "=" + URLEncoder.encode(sys, "UTF-8") + "&"
-                        + URLEncoder.encode("dia", "UTF-8") + "=" + URLEncoder.encode(dia, "UTF-8");
+                String postData = URLEncoder.encode("pid", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(selectedPatient), "UTF-8") + "&"
+                        + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(newMed, "UTF-8") + "&"
+                        + URLEncoder.encode("tim", "UTF-8") + "=" + URLEncoder.encode(medTime, "UTF-8");
                 bfWriter.write(postData);
                 bfWriter.flush();
                 bfWriter.close();
@@ -225,7 +162,7 @@ public class RecordBp extends AppCompatActivity {
                 String message = json.getString("message");
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 if (errorStatus) {
-                    Intent i = new Intent(getApplicationContext(), ViewBPHistory.class);
+                    Intent i = new Intent(getApplicationContext(), ViewMedSchedule.class);
                     startActivity(i);
                     finish();
                 }
@@ -236,4 +173,5 @@ public class RecordBp extends AppCompatActivity {
 
         }
     }
+
 }

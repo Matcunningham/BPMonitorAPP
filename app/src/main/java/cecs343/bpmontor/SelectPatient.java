@@ -5,10 +5,11 @@ import android.os.AsyncTask;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -27,44 +28,48 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
-public class ViewBPHistory extends AppCompatActivity {
+public class SelectPatient extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-    private BpRvAdapter mAdapter;
-    private SessionManager sesh;
+    private RadioRecyclerAdapter mAdapter;
     private int patientId;
-    private boolean isDoc;
-    private int selectedPatient;
+    private SessionManager sesh;
+    private int currentPatient = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_bphistory);
+        setContentView(R.layout.activity_select_patient);
         sesh = new SessionManager(getApplicationContext());
         sesh.checkLogin();
         patientId = sesh.getPid();
-        isDoc = sesh.getIsDoc();
-        if(isDoc)
-        {
-            selectedPatient = sesh.getCurrentPat();
-        }
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.bp);
+        Button selPatient = (Button) findViewById(R.id.select_patient);
+        mRecyclerView = (RecyclerView) findViewById(R.id.sel_patient_recycle);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mAdapter = new BpRvAdapter(R.layout.bp_list_item);
-        mRecyclerView.setAdapter(mAdapter);
+        mAdapter = new RadioRecyclerAdapter(new RadioRecyclerAdapter.OnItemCheckListener() {
+            @Override
+            public void onItemCheck(int patient) {
+                currentPatient = patient;
+            }
 
-        if(isDoc)
-        {
-            new BpQueryTask(selectedPatient).execute();
-        }
-        else
-        {
-            new BpQueryTask(patientId).execute();
-        }
+        });
+        mRecyclerView.setAdapter(mAdapter);
+        new SelectPatientTask().execute();
+
+        selPatient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sesh.setCurrentPat(currentPatient);
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
     }
 
     @Override
@@ -78,26 +83,19 @@ public class ViewBPHistory extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class BpQueryTask extends AsyncTask<Void, Void, String>{
-
-        private final int id;
-
-        BpQueryTask(int pid)
-        {
-            id = pid;
-        }
+    public class SelectPatientTask extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... voids) {
             try {
-                URL url = new URL(AppConfig.URL_BPHIST);
+                URL url = new URL(AppConfig.URL_SELPAT);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setDoOutput(true);
                 httpURLConnection.setDoInput(true);
                 OutputStream outStream = httpURLConnection.getOutputStream();
                 BufferedWriter bfWriter = new BufferedWriter(new OutputStreamWriter(outStream, "UTF-8"));
-                String postData = URLEncoder.encode("pid", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(id), "UTF-8");
+                String postData = URLEncoder.encode("pid", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(patientId), "UTF-8");
                 bfWriter.write(postData);
                 bfWriter.flush();
                 bfWriter.close();
@@ -126,22 +124,21 @@ public class ViewBPHistory extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final String result) {
-            String tabSep = "\t\t\t\t\t\t\t\t\t";
-            Toast.makeText(getApplicationContext(), "working...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Getting Patients...", Toast.LENGTH_SHORT).show();
             try {
                 JSONArray json = new JSONArray(result);
                 if(true)//Fix this
                 {
                     String[] data = new String[json.length()];
+                    List<Integer> pidData = new ArrayList<>();
                     for(int i = 0; i < json.length(); i++)
                     {
                         JSONObject row = json.getJSONObject(i);
-                        data[i] = row.getString(AppConfig.dateTag) + tabSep + row.getString(AppConfig.timeTag) +
-                                tabSep + row.getString(AppConfig.sysTag) + "\t/\t" + row.getString(AppConfig.diaTag);
-
+                        data[i] = row.getString(AppConfig.emailTag);
+                        pidData.add(row.getInt(AppConfig.pidTag));
 
                     }
-                    mAdapter.setBpData(data);
+                    mAdapter.setPatData(data, pidData);
 
                 }
                 else {
@@ -152,12 +149,7 @@ public class ViewBPHistory extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
-
-
         }
-
-
     }
+
 }

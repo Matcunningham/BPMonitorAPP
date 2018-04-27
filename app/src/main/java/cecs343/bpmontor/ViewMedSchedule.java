@@ -28,18 +28,26 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 public class ViewMedSchedule extends AppCompatActivity {
+
     private RecyclerView mRecyclerView;
     private BpRvAdapter mAdapter;
     private SessionManager sesh;
     private int patientId;
+    private boolean isDoc;
+    private int selectedPatient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_med_schedule);
         sesh = new SessionManager(getApplicationContext());
+        sesh.checkLogin();
         patientId = sesh.getPid();
-
+        isDoc = sesh.getIsDoc();
+        if(isDoc)
+        {
+            selectedPatient = sesh.getCurrentPat();
+        }
 
         mRecyclerView = (RecyclerView) findViewById(R.id.medsched_recycle);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -48,7 +56,14 @@ public class ViewMedSchedule extends AppCompatActivity {
         mAdapter = new BpRvAdapter(R.layout.bp_list_item);
         mRecyclerView.setAdapter(mAdapter);
 
-        new MedSchedQueryTask().execute();
+        if(isDoc)
+        {
+            new MedSchedQueryTask(selectedPatient).execute();
+        }
+        else
+        {
+            new MedSchedQueryTask(patientId).execute();
+        }
     }
 
     @Override
@@ -67,6 +82,13 @@ public class ViewMedSchedule extends AppCompatActivity {
 
     public class MedSchedQueryTask extends AsyncTask<Void, Void, String> {
 
+        private final int id;
+
+        MedSchedQueryTask(int pid)
+        {
+            id = pid;
+        }
+
         @Override
         protected String doInBackground(Void... voids) {
             try {
@@ -77,7 +99,7 @@ public class ViewMedSchedule extends AppCompatActivity {
                 httpURLConnection.setDoInput(true);
                 OutputStream outStream = httpURLConnection.getOutputStream();
                 BufferedWriter bfWriter = new BufferedWriter(new OutputStreamWriter(outStream, "UTF-8"));
-                String postData = URLEncoder.encode("pid", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(patientId), "UTF-8");
+                String postData = URLEncoder.encode("pid", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(id), "UTF-8");
                 bfWriter.write(postData);
                 bfWriter.flush();
                 bfWriter.close();

@@ -20,7 +20,7 @@ import java.util.List;
 public class MedChBoxRvAdapter extends RecyclerView.Adapter<MedChBoxRvAdapter.ItemViewHolder> {
 
     private String[] dataSet;
-    public List<String> medsSelected;
+    private int layoutId;
 
     private OnItemCheckListener onItemClick;
 
@@ -29,8 +29,8 @@ public class MedChBoxRvAdapter extends RecyclerView.Adapter<MedChBoxRvAdapter.It
         void onItemUncheck(String med);
     }
 
-    public MedChBoxRvAdapter(List<String> meds, OnItemCheckListener onItemCheckListener){
-        this.medsSelected = meds;
+    public MedChBoxRvAdapter(int layoutId, OnItemCheckListener onItemCheckListener){
+        this.layoutId = layoutId;
         this.onItemClick = onItemCheckListener;
 
     }
@@ -46,7 +46,7 @@ public class MedChBoxRvAdapter extends RecyclerView.Adapter<MedChBoxRvAdapter.It
     @Override
     public MedChBoxRvAdapter.ItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType){
         Context context = viewGroup.getContext();
-        int layoutIdforListItem = R.layout.medcheckbox_list_item;
+        int layoutIdforListItem = layoutId;
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View view = inflater.inflate(layoutIdforListItem, viewGroup, false);
@@ -65,9 +65,7 @@ public class MedChBoxRvAdapter extends RecyclerView.Adapter<MedChBoxRvAdapter.It
         public void onClick(View v) {
             CheckBox cb = (CheckBox) v;
             String med = (String) cb.getTag();
-            // TODO ^ <> return a string with the value so i can query database
-            //Intent i = new Intent("custom-message");
-            //https://stackoverflow.com/questions/33434626/get-list-of-checked-checkboxes-from-recyclerview-android
+
             if(((CheckBox) v).isChecked())
             {
                 onItemClick.onItemCheck(med);

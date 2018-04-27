@@ -14,6 +14,10 @@ public class AppConfig {
     public static final String URL_MEDSCHED = "http://bpmon.heliohost.org/medSched.php";
     public static final String URL_RECBP   = "http://bpmon.heliohost.org/recordBp.php";
     public static final String URL_RECMED   = "http://bpmon.heliohost.org/recordMed.php";
+    public static final String URL_SELPAT   = "http://bpmon.heliohost.org/selectPatient.php";
+    public static final String URL_UPDATESCHED   = "http://bpmon.heliohost.org/updateSched.php";
+    public static final String URL_ADDMED   = "http://bpmon.heliohost.org/addMed.php";
+    public static final String URL_DELMEDS   = "http://bpmon.heliohost.org/delMeds.php";
 
     //JSON TAGS
     public static final String pidTag = "pid";

@@ -33,7 +33,6 @@ public class BpRvAdapter extends RecyclerView.Adapter<BpRvAdapter.ItemViewHolder
         Context context = viewGroup.getContext();
         int layoutIdforListItem = listItem; //R.layout.bp_list_item;
         LayoutInflater inflater = LayoutInflater.from(context);
-        //boolean shouldAttatchToParentImmediately = false;
 
         View view = inflater.inflate(layoutIdforListItem, viewGroup, false);
         return new ItemViewHolder(view);

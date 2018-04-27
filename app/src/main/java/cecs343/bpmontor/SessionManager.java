@@ -32,7 +32,7 @@ public class SessionManager {
     SharedPreferences pref;
 
     // Editor for Shared preferences
-    Editor editor;
+    static Editor editor;
 
     // Context
     Context _context;
@@ -52,7 +52,10 @@ public class SessionManager {
     // Email address (make variable public to access from outside)
     public static final String KEY_EMAIL = "email";
 
-    public static boolean isDoc = false;
+    public static final String CURR_PAT = "CurrentPatient";
+
+    public static final String IS_DOC = "isDoctor";
+    public static boolean isDoc;
 
     // Constructor
     public SessionManager(Context context){
@@ -69,11 +72,24 @@ public class SessionManager {
         // Storing name in pref
         editor.putInt(KEY_PID, pid);
 
+        //new CheckDoctorTask(pid).execute();
+
 
         // commit changes
         editor.commit();
     }
 
+    public void setCurrentPat(int pid)
+    {
+        editor.putInt(CURR_PAT, pid);
+        editor.commit();
+    }
+
+    public int getCurrentPat()
+    {
+        int pid = pref.getInt(CURR_PAT, -1);
+        return pid;
+    }
     /**
      * Will check user login status
      * If false it will redirect user to login page
@@ -86,9 +102,9 @@ public class SessionManager {
             Intent i = new Intent(_context, LoginActivity.class);
             // Closing all the Activities
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             // Add new Flag to start new Activity
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             // Staring Login Activity
             _context.startActivity(i);
@@ -108,6 +124,12 @@ public class SessionManager {
         return pid;
     }
 
+    public boolean getIsDoc()
+    {
+        boolean doc = pref.getBoolean(IS_DOC, false);
+        return doc;
+    }
+
     /**
      * Clear session details
      * */
@@ -119,13 +141,17 @@ public class SessionManager {
         // After logout redirect user to Login Activity
         Intent i = new Intent(_context, LoginActivity.class);
         // Closing all the Activities
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         // Add new Flag to start new Activity
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
 
         // Staring Login Activity
         _context.startActivity(i);
+
     }
 
     /**
@@ -137,17 +163,17 @@ public class SessionManager {
     }
 
     // Check if user is doctor
-    public class CheckDoctor extends AsyncTask<Void, Void, Boolean> {
+    public static class CheckDoctorTask extends AsyncTask<Void, Void, String> {
 
         private final int mPid;
 
         // Constructor
-        CheckDoctor(int pid) {
+        CheckDoctorTask(int pid) {
             mPid = pid;
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
 
             try {
                 URL url = new URL(AppConfig.URL_ISDOCTOR);
@@ -173,13 +199,8 @@ public class SessionManager {
                 bfReader.close();
                 inStream.close();
                 httpURLConnection.disconnect();
-                Boolean isDoc = false;
-                if (result.equals("TRUE")) {
-                    isDoc = true;
-                }
-
-
-                return isDoc;
+                return result;
+                //return isDoc;
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -187,12 +208,24 @@ public class SessionManager {
                 e.printStackTrace();
             }
 
-            return false;
+            return "ERROR";
         }
 
         @Override
-        protected void onPostExecute(final Boolean result) {
-            isDoc = result;
+        protected void onPostExecute(final String result) {
+            //isDoc = result;
+            try {
+                JSONObject json = new JSONObject(result);
+                Boolean status = json.getBoolean("isDoctor");
+                isDoc = status;
+                editor.putBoolean(IS_DOC, isDoc);
+                editor.commit();
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 

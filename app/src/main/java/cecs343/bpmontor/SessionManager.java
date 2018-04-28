@@ -69,10 +69,8 @@ public class SessionManager {
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
 
-        // Storing name in pref
+        // Storing id in pref
         editor.putInt(KEY_PID, pid);
-
-        //new CheckDoctorTask(pid).execute();
 
 
         // commit changes
@@ -90,10 +88,9 @@ public class SessionManager {
         int pid = pref.getInt(CURR_PAT, -1);
         return pid;
     }
+
     /**
-     * Will check user login status
      * If false it will redirect user to login page
-     * Else won't do anything
      * */
     public void checkLogin(){
         // Check login status
@@ -113,10 +110,6 @@ public class SessionManager {
     }
 
 
-
-    /**
-     * Get stored session data
-     * */
     public int getPid(){
 
         // user ID
@@ -200,7 +193,6 @@ public class SessionManager {
                 inStream.close();
                 httpURLConnection.disconnect();
                 return result;
-                //return isDoc;
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -213,15 +205,12 @@ public class SessionManager {
 
         @Override
         protected void onPostExecute(final String result) {
-            //isDoc = result;
             try {
                 JSONObject json = new JSONObject(result);
-                Boolean status = json.getBoolean("isDoctor");
+                Boolean status = json.getBoolean(AppConfig.IS_DOC);
                 isDoc = status;
                 editor.putBoolean(IS_DOC, isDoc);
                 editor.commit();
-
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }

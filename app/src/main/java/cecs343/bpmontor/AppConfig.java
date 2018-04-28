@@ -31,5 +31,7 @@ public class AppConfig {
     public static final String nameTag = "name";
     public static final String sysTag = "sys";
     public static final String diaTag = "dia";
+    public static final String SUCCESS = "success";
+    public static final String IS_DOC = "isDoctor";
 
 }

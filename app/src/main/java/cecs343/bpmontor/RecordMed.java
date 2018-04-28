@@ -38,6 +38,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class RecordMed extends AppCompatActivity {
 
@@ -179,19 +180,22 @@ public class RecordMed extends AppCompatActivity {
         }
     }
 
-    public class RecordMedTask extends AsyncTask<Void, Void, String> {
+    public class RecordMedTask extends AsyncTask<Void, Void, ArrayList<String>> {
 
         private final int id;
+        private ArrayList<String> jsonList = new ArrayList<>();
 
         RecordMedTask(int pid)
         {
             id = pid;
         }
+
         @Override
-        protected String doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-            for(int i = 0; i < medsSelected.size(); i++) {
-                try {
+        protected ArrayList<String> doInBackground(Void... params) {
+
+
+            try {
+                for(int i = 0; i < medsSelected.size(); i++) {
                     URL url = new URL(AppConfig.URL_RECMED);
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("POST");
@@ -210,42 +214,54 @@ public class RecordMed extends AppCompatActivity {
 
                     InputStream inStream = httpURLConnection.getInputStream();
                     BufferedReader bfReader = new BufferedReader(new InputStreamReader(inStream, "iso-8859-1"));
-                    String result = "";
                     String line = "";
+                    String result = "";
                     while ((line = bfReader.readLine()) != null) {
+
                         result += line;
                     }
+
                     bfReader.close();
                     inStream.close();
                     httpURLConnection.disconnect();
-                    return result;
-
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    jsonList.add(result);
                 }
+
+                return jsonList;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            return "Error";
+            return new ArrayList<String>();
         }
 
         @Override
-        protected void onPostExecute(final String result) {
+        protected void onPostExecute(final ArrayList<String> result) {
             try {
-                JSONObject json = new JSONObject(result);
-                Boolean errorStatus = json.getBoolean("success");
-                String message = json.getString("message");
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                if (errorStatus) {
+                boolean flag = true;
+                for(int i = 0; i < result.size(); i++) {
+
+                    JSONObject json = new JSONObject(result.get(i));
+                    Boolean errorStatus = json.getBoolean("success");
+                    String message = json.getString("message");
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    if(errorStatus == false)
+                    {
+                        flag = false;
+                    }
+                }
+                if(flag != false) {
                     Intent i = new Intent(getApplicationContext(), ViewMedHistory.class);
                     startActivity(i);
                     finish();
                 }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
 
         }
     }
@@ -293,27 +309,27 @@ public class RecordMed extends AppCompatActivity {
         @Override
         protected void onPostExecute(final String result) {
             try {
-                JSONArray json = new JSONArray(result);
-                if(true)//Fix this
+                JSONObject jsonOb = new JSONObject(result);
+                boolean status = jsonOb.getBoolean(AppConfig.SUCCESS);
+                if(status)
                 {
+                    JSONArray json = jsonOb.getJSONArray("data");
                     String[] data = new String[json.length()];
                     for(int i = 0; i < json.length(); i++)
                     {
                         JSONObject row = json.getJSONObject(i);
                         String drugName =  row.getString(AppConfig.mednameTag);
-                        //String time = row.getString(AppConfig.timeTag);
 
-                        String lineFormat = drugName;
-                        data[i] = lineFormat;
+                        String line = drugName;
+                        data[i] = line;
 
                     }
                     mAdapter.setBpData(data);
 
                 }
                 else {
-                    JSONObject jsonOb = new JSONObject(result);
                     String message = jsonOb.getString("message");
-                    Toast.makeText(getApplicationContext(), "Error retrieving your meds", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

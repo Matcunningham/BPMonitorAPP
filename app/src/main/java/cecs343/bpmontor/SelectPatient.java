@@ -126,9 +126,11 @@ public class SelectPatient extends AppCompatActivity {
         protected void onPostExecute(final String result) {
             Toast.makeText(getApplicationContext(), "Getting Patients...", Toast.LENGTH_SHORT).show();
             try {
-                JSONArray json = new JSONArray(result);
-                if(true)//Fix this
+                JSONObject jsonOb = new JSONObject(result);
+                boolean status = jsonOb.getBoolean(AppConfig.SUCCESS);
+                if(status)
                 {
+                    JSONArray json = jsonOb.getJSONArray("data");
                     String[] data = new String[json.length()];
                     List<Integer> pidData = new ArrayList<>();
                     for(int i = 0; i < json.length(); i++)
@@ -136,13 +138,10 @@ public class SelectPatient extends AppCompatActivity {
                         JSONObject row = json.getJSONObject(i);
                         data[i] = row.getString(AppConfig.emailTag);
                         pidData.add(row.getInt(AppConfig.pidTag));
-
                     }
                     mAdapter.setPatData(data, pidData);
-
                 }
                 else {
-                    JSONObject jsonOb = new JSONObject(result);
                     String message = jsonOb.getString("message");
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 }

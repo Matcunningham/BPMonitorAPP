@@ -48,12 +48,11 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
-                if (!email.isEmpty() && !password.isEmpty() && email.contains("@") && password.length() > 5) {
+                if (!email.isEmpty() && !password.isEmpty() && email.contains("@") && password.length() > 3) {
                     Toast.makeText(getApplicationContext(), "Working", Toast.LENGTH_LONG).show();
-                    regTask = new UserRegTask(email, password);
-                    regTask.execute((Void)null);
+                    new UserRegTask(email, password).execute();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Please enter all fields.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Password must be 6 or more characters. Email must be valid.", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -125,12 +124,12 @@ public class RegisterActivity extends AppCompatActivity {
             try {
                 JSONObject json = new JSONObject(result);
                 Boolean errorStatus = json.getBoolean(AppConfig.errorTag);
-                if (errorStatus == true) {
+                if (errorStatus) {
                     String errorMessage = json.getString(AppConfig.errorMessageTag);
                     Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                 } else {
                     String email = json.getString(AppConfig.emailTag);
-                    Toast.makeText(getApplicationContext(), email + "Now Registered", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), email + " Now Registered", Toast.LENGTH_LONG).show();
                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(i);
                     finish();
@@ -138,13 +137,6 @@ public class RegisterActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
         }
-
     }
-
-
-
-
 }

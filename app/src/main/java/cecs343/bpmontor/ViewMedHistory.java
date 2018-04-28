@@ -128,9 +128,11 @@ public class ViewMedHistory extends AppCompatActivity {
         protected void onPostExecute(final String result) {
             Toast.makeText(getApplicationContext(), "working...", Toast.LENGTH_SHORT).show();
             try {
-                JSONArray json = new JSONArray(result);
-                if(true)//Fix this
+                JSONObject jsonOb = new JSONObject(result);
+                boolean status = jsonOb.getBoolean(AppConfig.SUCCESS);
+                if(status)//Fix this
                 {
+                    JSONArray json = jsonOb.getJSONArray("data");
                     String[] data = new String[json.length()];
                     for(int i = 0; i < json.length(); i++)
                     {
@@ -146,7 +148,6 @@ public class ViewMedHistory extends AppCompatActivity {
 
                 }
                 else {
-                    JSONObject jsonOb = new JSONObject(result);
                     String message = jsonOb.getString("message");
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 }

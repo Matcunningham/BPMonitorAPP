@@ -129,9 +129,12 @@ public class ViewBPHistory extends AppCompatActivity {
             String tabSep = "\t\t\t\t\t\t\t\t\t";
             Toast.makeText(getApplicationContext(), "working...", Toast.LENGTH_SHORT).show();
             try {
-                JSONArray json = new JSONArray(result);
-                if(true)//Fix this
+                //JSONArray json = new JSONArray(result);
+                JSONObject jsonOb = new JSONObject(result);
+                boolean status = jsonOb.getBoolean(AppConfig.SUCCESS);
+                if(status)
                 {
+                    JSONArray json = jsonOb.getJSONArray("data");
                     String[] data = new String[json.length()];
                     for(int i = 0; i < json.length(); i++)
                     {
@@ -145,7 +148,7 @@ public class ViewBPHistory extends AppCompatActivity {
 
                 }
                 else {
-                    JSONObject jsonOb = new JSONObject(result);
+                    //JSONObject jsonOb = new JSONObject(result);
                     String message = jsonOb.getString("message");
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 }

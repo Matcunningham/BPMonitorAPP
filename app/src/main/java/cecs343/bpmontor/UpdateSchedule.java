@@ -135,11 +135,13 @@ public class UpdateSchedule extends AppCompatActivity {
         }
     }
 
-    public class UpdateSchedTask extends AsyncTask<Void, Void, String> {
+    public class UpdateSchedTask extends AsyncTask<Void, Void, ArrayList<String>> {
+
+        private ArrayList<String> jsonList = new ArrayList<>();
 
         @Override
-        protected String doInBackground(Void... params) {
-            String result = "";
+        protected ArrayList<String> doInBackground(Void... params) {
+
             try {
                 for(int i = 0; i < medsSelected.size(); i++) {
                     String oldTime = "";
@@ -168,14 +170,16 @@ public class UpdateSchedule extends AppCompatActivity {
                     InputStream inStream = httpURLConnection.getInputStream();
                     BufferedReader bfReader = new BufferedReader(new InputStreamReader(inStream, "iso-8859-1"));
                     String line = "";
+                    String result = "";
                     while ((line = bfReader.readLine()) != null) {
                         result += line;
                     }
                     bfReader.close();
                     inStream.close();
                     httpURLConnection.disconnect();
+                    jsonList.add(result);
                 }
-                return result;
+                return jsonList;
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -184,17 +188,25 @@ public class UpdateSchedule extends AppCompatActivity {
             }
 
 
-            return "Error";
+            return new ArrayList<String>();
         }
 
         @Override
-        protected void onPostExecute(final String result) {
+        protected void onPostExecute(final ArrayList<String> result) {
             try {
-                JSONObject json = new JSONObject(result);
-                Boolean errorStatus = json.getBoolean("success");
-                String message = json.getString("message");
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                if (errorStatus) {
+                boolean flag = true;
+                for(int i = 0; i < result.size(); i++) {
+
+                    JSONObject json = new JSONObject(result.get(i));
+                    Boolean errorStatus = json.getBoolean("success");
+                    String message = json.getString("message");
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    if(errorStatus == false)
+                    {
+                        flag = false;
+                    }
+                }
+                if(flag != false) {
                     Intent i = new Intent(getApplicationContext(), ViewMedSchedule.class);
                     startActivity(i);
                     finish();
@@ -250,9 +262,11 @@ public class UpdateSchedule extends AppCompatActivity {
         @Override
         protected void onPostExecute(final String result) {
             try {
-                JSONArray json = new JSONArray(result);
-                if(true)//Fix this
+                JSONObject jsonOb = new JSONObject(result);
+                boolean status = jsonOb.getBoolean(AppConfig.SUCCESS);
+                if(status)
                 {
+                    JSONArray json = jsonOb.getJSONArray("data");
                     String[] data = new String[json.length()];
                     for(int i = 0; i < json.length(); i++)
                     {
@@ -268,9 +282,8 @@ public class UpdateSchedule extends AppCompatActivity {
 
                 }
                 else {
-                    JSONObject jsonOb = new JSONObject(result);
                     String message = jsonOb.getString("message");
-                    Toast.makeText(getApplicationContext(), "Error retrieving your meds", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

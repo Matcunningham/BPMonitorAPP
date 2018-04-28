@@ -85,13 +85,13 @@ public class RecordBp extends AppCompatActivity {
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         FragmentManager fragMan = getFragmentManager();
-        newFragment.show(fragMan, "datePicker");
+        newFragment.show(fragMan, "datePickerBP");
     }
 
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         FragmentManager fragMan = getFragmentManager();
-        newFragment.show(fragMan, "timePicker");
+        newFragment.show(fragMan, "timePickerBP");
     }
 
     public static class DatePickerFragment extends DialogFragment

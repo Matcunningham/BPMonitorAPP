@@ -44,6 +44,9 @@ public class UpdateSchedule extends AppCompatActivity {
     private MedChBoxRvAdapter mAdapter;
     private SessionManager sesh;
     private int selectedPatient;
+    private String currPatientName;
+    private boolean isDoc;
+    private int patientId;
     private static String newTime;
     public List<String> medsSelected = new ArrayList<>();
 
@@ -54,7 +57,14 @@ public class UpdateSchedule extends AppCompatActivity {
 
         sesh = new SessionManager(getApplicationContext());
         sesh.checkLogin();
-        selectedPatient = sesh.getCurrentPat();
+        patientId = sesh.getPid();
+        isDoc = sesh.getIsDoc();
+        if(isDoc)
+        {
+            selectedPatient = sesh.getCurrentPat();
+            currPatientName = sesh.getCurrentPatName();
+            setTitle("Current Patient: " + currPatientName);
+        }
 
         Button timePick = findViewById(R.id.time_select_update);
         Button updateSched = findViewById(R.id.update_sched_btn);
@@ -76,12 +86,23 @@ public class UpdateSchedule extends AppCompatActivity {
         });
         mRecyclerView.setAdapter(mAdapter);
 
-        new MedSchedQueryTask().execute();
-
+        if(isDoc) {
+            new MedSchedQueryTask(selectedPatient).execute();
+        }
+        else
+        {
+            new MedSchedQueryTask(patientId).execute();
+        }
         updateSched.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(android.view.View view) {
-                new UpdateSchedTask().execute();
+                if(isDoc) {
+                    new UpdateSchedTask(selectedPatient).execute();
+                }
+                else
+                {
+                    new UpdateSchedTask(patientId).execute();
+                }
             }
         });
     }
@@ -96,6 +117,7 @@ public class UpdateSchedule extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         FragmentManager fragMan = getFragmentManager();
@@ -138,6 +160,12 @@ public class UpdateSchedule extends AppCompatActivity {
     public class UpdateSchedTask extends AsyncTask<Void, Void, ArrayList<String>> {
 
         private ArrayList<String> jsonList = new ArrayList<>();
+        private int id;
+
+        UpdateSchedTask(int pid)
+        {
+            id = pid;
+        }
 
         @Override
         protected ArrayList<String> doInBackground(Void... params) {
@@ -158,7 +186,7 @@ public class UpdateSchedule extends AppCompatActivity {
                     httpURLConnection.setDoInput(true);
                     OutputStream outStream = httpURLConnection.getOutputStream();
                     BufferedWriter bfWriter = new BufferedWriter(new OutputStreamWriter(outStream, "UTF-8"));
-                    String postData = URLEncoder.encode("pid", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(selectedPatient), "UTF-8") + "&"
+                    String postData = URLEncoder.encode("pid", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(id), "UTF-8") + "&"
                             + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(med, "UTF-8") + "&"
                             + URLEncoder.encode("oldtime", "UTF-8") + "=" + URLEncoder.encode(oldTime, "UTF-8") + "&"
                             + URLEncoder.encode("newtime", "UTF-8") + "=" + URLEncoder.encode(newTime, "UTF-8");
@@ -214,13 +242,18 @@ public class UpdateSchedule extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
         }
     }
 
 
     public class MedSchedQueryTask extends AsyncTask<Void, Void, String> {
+
+        private int id;
+
+        MedSchedQueryTask(int pid)
+        {
+            id = pid;
+        }
 
         @Override
         protected String doInBackground(Void... voids) {
@@ -232,7 +265,7 @@ public class UpdateSchedule extends AppCompatActivity {
                 httpURLConnection.setDoInput(true);
                 OutputStream outStream = httpURLConnection.getOutputStream();
                 BufferedWriter bfWriter = new BufferedWriter(new OutputStreamWriter(outStream, "UTF-8"));
-                String postData = URLEncoder.encode("pid", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(selectedPatient), "UTF-8");
+                String postData = URLEncoder.encode("pid", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(id), "UTF-8");
                 bfWriter.write(postData);
                 bfWriter.flush();
                 bfWriter.close();

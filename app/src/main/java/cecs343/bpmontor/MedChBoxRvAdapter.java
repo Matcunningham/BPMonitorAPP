@@ -2,6 +2,7 @@ package cecs343.bpmontor;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,11 +56,20 @@ public class MedChBoxRvAdapter extends RecyclerView.Adapter<MedChBoxRvAdapter.It
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
-        String dataElem = dataSet[position]; //.get(position);
+        // Alternating row colors
+        if(position % 2 == 0)
+        {
+            holder.medCheckItemView.setBackgroundColor(Color.parseColor("#8b8f94"));
+        }
+        else
+        {
+            holder.medCheckItemView.setBackgroundColor(Color.parseColor("#5e6266"));
+        }
+
+        String dataElem = dataSet[position];
         holder.medCheckItemView.setText(dataElem);
 
-        //holder.check.setChecked(dataSet.get(position));
-        holder.check.setTag(dataSet[position]); //.get(position));
+        holder.check.setTag(dataSet[position]);
 
         holder.check.setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {

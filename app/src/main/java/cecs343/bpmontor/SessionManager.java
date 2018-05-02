@@ -53,6 +53,8 @@ public class SessionManager {
     public static final String KEY_EMAIL = "email";
 
     public static final String CURR_PAT = "CurrentPatient";
+    public static final String CURR_PAT_NAME = "CurrentPatientName";
+
 
     public static final String IS_DOC = "isDoctor";
     public static boolean isDoc;
@@ -89,6 +91,17 @@ public class SessionManager {
         return pid;
     }
 
+    public void setCurrentPatName(String name)
+    {
+        editor.putString(CURR_PAT_NAME, name);
+        editor.commit();
+    }
+
+    public String getCurrentPatName()
+    {
+        String name = pref.getString(CURR_PAT_NAME, "ERROR ");
+        return name;
+    }
     /**
      * If false it will redirect user to login page
      * */

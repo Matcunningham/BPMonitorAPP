@@ -1,38 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="cecs343.bpmontor.UpdateSchedule"
-    android:orientation="vertical"
-    android:weightSum="10">
+    android:orientation="vertical">
 
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/update_recycle"
-        android:layout_weight="3.5">
+        android:background="@color/colorPrimaryDark">
 
     </android.support.v7.widget.RecyclerView>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="6">
-
 
 
         <Button
             android:id="@+id/time_select_update"
-            android:layout_width="368dp"
-            android:layout_height="74dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_above="@+id/update_sched_btn"
             android:layout_marginBottom="12dp"
+            android:background="@color/colorSecondaryAccent"
+            android:textColor="@color/white"
+            android:textSize="20sp"
             android:onClick="showTimePickerDialog"
-            android:text="Select New Time" />
+            android:text="@string/select_new_time" />
 
         <Button
             android:id="@+id/update_sched_btn"
@@ -41,11 +37,10 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="30dp"
-            android:text="UPDATE" />
+            android:background="@color/colorAccent"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:text="@string/update_btn" />
 
-    </RelativeLayout>
 
-
-
-</LinearLayout>
+</RelativeLayout>

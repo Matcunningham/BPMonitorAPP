@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -35,6 +36,9 @@ public class DeleteMeds extends AppCompatActivity {
 
     private SessionManager sesh;
     private int selectedPatient;
+    private boolean isDoc;
+    private int patientId;
+    private String currPatientName;
     private List<String> medsSelected = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private MedChBoxRvAdapter mAdapter;
@@ -46,8 +50,14 @@ public class DeleteMeds extends AppCompatActivity {
 
         sesh = new SessionManager(getApplicationContext());
         sesh.checkLogin();
-        selectedPatient = sesh.getCurrentPat();
-
+        patientId = sesh.getPid();
+        isDoc = sesh.getIsDoc();
+        if(isDoc)
+        {
+            selectedPatient = sesh.getCurrentPat();
+            currPatientName = sesh.getCurrentPatName();
+            setTitle("Current Patient: " + currPatientName);
+        }
 
         Button delMeds = findViewById(R.id.delete_btn);
 
@@ -69,12 +79,23 @@ public class DeleteMeds extends AppCompatActivity {
 
         mRecyclerView.setAdapter(mAdapter);
 
-        new MedSchedQueryTask().execute();
-
+        if(isDoc) {
+            new MedSchedQueryTask(selectedPatient).execute();
+        }
+        else
+        {
+            new MedSchedQueryTask(patientId).execute();
+        }
         delMeds.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(android.view.View view) {
-                new DelMedTask().execute();
+                if(isDoc) {
+                    new DelMedTask(selectedPatient).execute();
+                }
+                else
+                {
+                    new DelMedTask(patientId).execute();
+                }
             }
         });
     }
@@ -91,11 +112,19 @@ public class DeleteMeds extends AppCompatActivity {
     }
 
 
-    public class DelMedTask extends AsyncTask<Void, Void, String> {
+    public class DelMedTask extends AsyncTask<Void, Void, ArrayList<String>> {
+
+        private ArrayList<String> jsonList = new ArrayList<>();
+        private int id;
+
+        DelMedTask(int pid)
+        {
+            id = pid;
+        }
 
         @Override
-        protected String doInBackground(Void... params) {
-            String result = "";
+        protected ArrayList<String> doInBackground(Void... params) {
+
             try {
                 for(int i = 0; i < medsSelected.size(); i++) {
                     String oldTime = "";
@@ -112,7 +141,7 @@ public class DeleteMeds extends AppCompatActivity {
                     httpURLConnection.setDoInput(true);
                     OutputStream outStream = httpURLConnection.getOutputStream();
                     BufferedWriter bfWriter = new BufferedWriter(new OutputStreamWriter(outStream, "UTF-8"));
-                    String postData = URLEncoder.encode("pid", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(selectedPatient), "UTF-8") + "&"
+                    String postData = URLEncoder.encode("pid", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(id), "UTF-8") + "&"
                             + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(med, "UTF-8") + "&"
                             + URLEncoder.encode("tim", "UTF-8") + "=" + URLEncoder.encode(oldTime, "UTF-8");
                     bfWriter.write(postData);
@@ -122,7 +151,7 @@ public class DeleteMeds extends AppCompatActivity {
 
                     InputStream inStream = httpURLConnection.getInputStream();
                     BufferedReader bfReader = new BufferedReader(new InputStreamReader(inStream, "iso-8859-1"));
-
+                    String result = "";
                     String line = "";
                     while ((line = bfReader.readLine()) != null) {
                         result += line;
@@ -130,8 +159,9 @@ public class DeleteMeds extends AppCompatActivity {
                     bfReader.close();
                     inStream.close();
                     httpURLConnection.disconnect();
+                    jsonList.add(result);
                 }
-                return result;
+                return jsonList;
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -140,17 +170,25 @@ public class DeleteMeds extends AppCompatActivity {
             }
 
 
-            return "Error";
+            return new ArrayList<String>();
         }
 
         @Override
-        protected void onPostExecute(final String result) {
+        protected void onPostExecute(final  ArrayList<String> result) {
             try {
-                JSONObject json = new JSONObject(result);
-                Boolean errorStatus = json.getBoolean("success");
-                String message = json.getString("message");
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                if (errorStatus) {
+                boolean flag = true;
+                for(int i = 0; i < result.size(); i++) {
+
+                    JSONObject json = new JSONObject(result.get(i));
+                    Boolean errorStatus = json.getBoolean("success");
+                    String message = json.getString("message");
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    if(errorStatus == false)
+                    {
+                        flag = false;
+                    }
+                }
+                if(flag != false) {
                     Intent i = new Intent(getApplicationContext(), ViewMedSchedule.class);
                     startActivity(i);
                     finish();
@@ -166,6 +204,13 @@ public class DeleteMeds extends AppCompatActivity {
 
     public class MedSchedQueryTask extends AsyncTask<Void, Void, String> {
 
+        private int id;
+
+        MedSchedQueryTask(int pid)
+        {
+            id = pid;
+        }
+
         @Override
         protected String doInBackground(Void... voids) {
             try {
@@ -176,7 +221,7 @@ public class DeleteMeds extends AppCompatActivity {
                 httpURLConnection.setDoInput(true);
                 OutputStream outStream = httpURLConnection.getOutputStream();
                 BufferedWriter bfWriter = new BufferedWriter(new OutputStreamWriter(outStream, "UTF-8"));
-                String postData = URLEncoder.encode("pid", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(selectedPatient), "UTF-8");
+                String postData = URLEncoder.encode("pid", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(id), "UTF-8");
                 bfWriter.write(postData);
                 bfWriter.flush();
                 bfWriter.close();
@@ -206,9 +251,11 @@ public class DeleteMeds extends AppCompatActivity {
         @Override
         protected void onPostExecute(final String result) {
             try {
-                JSONArray json = new JSONArray(result);
-                if(true)//Fix this
+                JSONObject jsonOb = new JSONObject(result);
+                boolean status = jsonOb.getBoolean(AppConfig.SUCCESS);
+                if(status)
                 {
+                    JSONArray json = jsonOb.getJSONArray("data");
                     String[] data = new String[json.length()];
                     for(int i = 0; i < json.length(); i++)
                     {
@@ -224,9 +271,8 @@ public class DeleteMeds extends AppCompatActivity {
 
                 }
                 else {
-                    JSONObject jsonOb = new JSONObject(result);
                     String message = jsonOb.getString("message");
-                    Toast.makeText(getApplicationContext(), "Error retrieving your meds", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

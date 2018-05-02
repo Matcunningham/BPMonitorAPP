@@ -32,6 +32,7 @@ public class ViewMedHistory extends AppCompatActivity {
     private BpRvAdapter mAdapter;
     private SessionManager sesh;
     private int patientId;
+    private String currPatientName;
     private boolean isDoc;
     private int selectedPatient;
 
@@ -48,6 +49,8 @@ public class ViewMedHistory extends AppCompatActivity {
         if(isDoc)
         {
             selectedPatient = sesh.getCurrentPat();
+            currPatientName = sesh.getCurrentPatName();
+            setTitle("Current Patient: " + currPatientName);
         }
 
         mRecyclerView = (RecyclerView) findViewById(R.id.medhist_recycle);
@@ -87,8 +90,11 @@ public class ViewMedHistory extends AppCompatActivity {
         {
             id = pid;
         }
+
         @Override
         protected String doInBackground(Void... voids) {
+
+            // HTTP POST Request, returns JSON String for parsing.
             try {
                 URL url = new URL(AppConfig.URL_MEDHIST);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -130,7 +136,7 @@ public class ViewMedHistory extends AppCompatActivity {
             try {
                 JSONObject jsonOb = new JSONObject(result);
                 boolean status = jsonOb.getBoolean(AppConfig.SUCCESS);
-                if(status)//Fix this
+                if(status)
                 {
                     JSONArray json = jsonOb.getJSONArray("data");
                     String[] data = new String[json.length()];

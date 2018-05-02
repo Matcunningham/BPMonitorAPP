@@ -30,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     private UserRegTask regTask = null;
     private Button btnRegister;
     private Button btnLinkToLogin;
+    private EditText inputName;
     private EditText inputEmail;
     private EditText inputPassword;
 
@@ -39,6 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
 
+        inputName = (EditText) findViewById(R.id.fullname);
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
         btnRegister = (Button) findViewById(R.id.btnRegister);
@@ -46,11 +48,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                String name = inputName.getText().toString().trim();
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
-                if (!email.isEmpty() && !password.isEmpty() && email.contains("@") && password.length() > 3) {
+                if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty() && email.contains("@") && password.length() > 3) {
                     Toast.makeText(getApplicationContext(), "Working", Toast.LENGTH_LONG).show();
-                    new UserRegTask(email, password).execute();
+                    new UserRegTask(email, password, name).execute();
                 } else {
                     Toast.makeText(getApplicationContext(), "Password must be 6 or more characters. Email must be valid.", Toast.LENGTH_LONG).show();
                 }
@@ -75,10 +78,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         private final String mEmail;
         private final String mPassword;
+        private final String name;
 
-        UserRegTask(String email, String password) {
+        UserRegTask(String email, String password, String fullname) {
             mEmail = email;
             mPassword = password;
+            name = fullname;
         }
 
         @Override
@@ -92,7 +97,8 @@ public class RegisterActivity extends AppCompatActivity {
                 OutputStream outStream = httpURLConnection.getOutputStream();
                 BufferedWriter bfWriter = new BufferedWriter(new OutputStreamWriter(outStream, "UTF-8"));
                 String postData = URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(mEmail, "UTF-8") + "&"
-                        + URLEncoder.encode("pass", "UTF-8") + "=" + URLEncoder.encode(mPassword, "UTF-8");
+                        + URLEncoder.encode("pass", "UTF-8") + "=" + URLEncoder.encode(mPassword, "UTF-8") + "&"
+                        + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8");
                 bfWriter.write(postData);
                 bfWriter.flush();
                 bfWriter.close();

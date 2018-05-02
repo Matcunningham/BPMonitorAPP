@@ -5,6 +5,7 @@ package cecs343.bpmontor;
  */
 
 import android.content.Context;
+import android.graphics.Color;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,13 +22,14 @@ public class RadioRecyclerAdapter extends RecyclerView.Adapter<RadioRecyclerAdap
 
 private String[] dataSet;
 private List<Integer> idData;
+private List<String> nameData;
 private int lastSelectedPos = -1;
 private RadioButton lastChecked = null;
 
 private OnItemCheckListener onItemClick;
 
 interface OnItemCheckListener {
-    void onItemCheck(int patient);
+    void onItemCheck(int patient, String name);
 }
 
     public RadioRecyclerAdapter( OnItemCheckListener onItemCheckListener){
@@ -55,11 +57,30 @@ interface OnItemCheckListener {
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, final int position) {
-        String dataElem = dataSet[position]; //.get(position);
-        holder.patItemView.setText(dataElem);
+        // Alternating row colors
+        if(position % 2 == 0)
+        {
+            holder.patItemView.setBackgroundColor(Color.parseColor("#8b8f94"));
+        }
+        else
+        {
+            holder.patItemView.setBackgroundColor(Color.parseColor("#5e6266"));
+        }
+        String dataElem = dataSet[position];
+        final String nameElem = nameData.get(position);
+
+        String textToSet = nameElem + "\n\t\t" + dataElem;
+
+        if(position == 0)
+        {
+            holder.patItemView.setBackgroundColor(Color.parseColor("#428bca"));
+            textToSet = textToSet + "\t\t\t(ME)";
+        }
+
+        holder.patItemView.setText(textToSet);
 
 
-        final String pat = dataSet[position];
+
         final int pid = idData.get(position);
 
 
@@ -74,7 +95,7 @@ interface OnItemCheckListener {
                     {
                         lastChecked.setChecked(false);
                     }
-                    onItemClick.onItemCheck(pid);
+                    onItemClick.onItemCheck(pid, nameElem);
                     lastChecked = rb;
                     lastSelectedPos = clickedPos;
                 }
@@ -96,10 +117,11 @@ class ItemViewHolder extends RecyclerView.ViewHolder {
 
 }
 
-    public void setPatData(String[] data, List pids)
+    public void setPatData(String[] data, List pids, List names)
     {
         dataSet = data;
         idData = pids;
+        nameData = names;
         notifyDataSetChanged();
     }
 }

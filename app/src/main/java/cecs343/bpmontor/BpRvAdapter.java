@@ -1,6 +1,7 @@
 package cecs343.bpmontor;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.view.LayoutInflater;
@@ -40,6 +41,16 @@ public class BpRvAdapter extends RecyclerView.Adapter<BpRvAdapter.ItemViewHolder
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
+        // Alternating row colors
+        if(position % 2 == 0)
+        {
+            holder.bpItemView.setBackgroundColor(Color.parseColor("#8b8f94"));
+        }
+        else
+        {
+            holder.bpItemView.setBackgroundColor(Color.parseColor("#5e6266"));
+        }
+
         String dataElem = dataSet[position];
         holder.bpItemView.setText(dataElem);
     }

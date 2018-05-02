@@ -34,6 +34,7 @@ public class ViewBPHistory extends AppCompatActivity {
     private BpRvAdapter mAdapter;
     private SessionManager sesh;
     private int patientId;
+    private String currPatientName;
     private boolean isDoc;
     private int selectedPatient;
 
@@ -48,6 +49,8 @@ public class ViewBPHistory extends AppCompatActivity {
         if(isDoc)
         {
             selectedPatient = sesh.getCurrentPat();
+            currPatientName = sesh.getCurrentPatName();
+            setTitle("Current Patient: " + currPatientName);
         }
 
         mRecyclerView = (RecyclerView) findViewById(R.id.bp);

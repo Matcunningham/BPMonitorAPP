@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,75 +7,92 @@
     tools:context="cecs343.bpmontor.MainActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/patienttitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:gravity="center"
         android:text="Patient"
         android:textAllCaps="true"
         android:textSize="20sp" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_below="@id/patienttitle"
         android:layout_width="match_parent"
-        android:layout_height="444dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/view_med_sched"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/view_med_sched"
-            app:layout_constraintStart_toStartOf="@+id/button3"
-            tools:layout_editor_absoluteY="25dp" />
+            android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/view_med_hist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/view_med_hist"
-            app:layout_constraintStart_toStartOf="@+id/button2"
-            tools:layout_editor_absoluteY="91dp" />
+            <Button
+                android:id="@+id/view_med_sched"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/view_med_sched"
+                android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/view_bp_hist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/view_bp_hist"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="150dp" />
+            <Button
+                android:id="@+id/view_med_hist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view_med_sched"
+                android:text="@string/view_med_hist"
+                android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/record_bp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/record_bp" />
+            <Button
+                android:id="@+id/view_bp_hist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view_med_hist"
+                android:text="@string/view_bp_hist"
+                android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/record_meds"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/record_med" />
+            <Button
+                android:id="@+id/update_sched"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view_bp_hist"
+                android:textSize="20sp"
+                android:text="Update Med Schedule" />
 
+            <Button
+                android:id="@+id/record_bp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/update_sched"
+                android:textSize="20sp"
+                android:text="@string/record_bp" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/record_meds"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/record_bp"
+                android:textSize="20sp"
+                android:text="@string/record_med" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/add_doc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/logout"
+        android:padding="5dp"
+        android:textSize="20sp"
+        android:text="Add/Update Doctor" />
 
     <Button
         android:id="@+id/logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_alignParentBottom="true"
         android:text="LOGOUT"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textSize="20sp" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

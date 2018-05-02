@@ -18,13 +18,13 @@ public class AppConfig {
     public static final String URL_UPDATESCHED   = "http://bpmon.heliohost.org/updateSched.php";
     public static final String URL_ADDMED   = "http://bpmon.heliohost.org/addMed.php";
     public static final String URL_DELMEDS   = "http://bpmon.heliohost.org/delMeds.php";
+    public static final String URL_ADDDOC   = "http://bpmon.heliohost.org/addDoc.php";
 
     //JSON TAGS
     public static final String pidTag = "pid";
     public static final String errorTag = "error";
     public static final String errorMessageTag = "error_msg";
     public static final String emailTag = "email";
-    public static final String docidTag = "docid";
     public static final String dateTag = "dte";
     public static final String timeTag = "tim";
     public static final String mednameTag = "medName";
@@ -33,5 +33,6 @@ public class AppConfig {
     public static final String diaTag = "dia";
     public static final String SUCCESS = "success";
     public static final String IS_DOC = "isDoctor";
+    public static final String FULL_NAME = "fullname";
 
 }

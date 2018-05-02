@@ -1,61 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="cecs343.bpmontor.RecordMed"
-    android:orientation="vertical"
-    android:weightSum="10">
+    android:orientation="vertical">
 
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
         android:id="@+id/medcheckbox_recycle"
-        android:layout_weight="6">
-
+        android:background="@color/colorPrimaryDark">
     </android.support.v7.widget.RecyclerView>
 
-    <RelativeLayout
+
+    <Button
+        android:id="@+id/date_select_recmed"
+        android:layout_above="@id/time_select_recmed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="4">
-
-        <Button
-            android:id="@+id/date_select_recmed"
-            android:layout_width="368dp"
-            android:layout_height="74dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="38dp"
-            android:onClick="showDatePickerDialog"
-            android:text="@string/date_select" />
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="38dp"
+        android:onClick="showDatePickerDialog"
+        android:text="Date" />
 
 
-        <Button
-            android:id="@+id/time_select_recmed"
-            android:layout_width="368dp"
-            android:layout_height="74dp"
-            android:layout_centerHorizontal="true"
-            android:layout_above="@+id/record_med_btn"
-            android:layout_alignStart="@+id/date_select_recmed"
-            android:layout_marginBottom="12dp"
-            android:onClick="showTimePickerDialog"
-            android:text="Select Time" />
+    <Button
+        android:id="@+id/time_select_recmed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorSecondaryAccent"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_above="@+id/record_med_btn"
+        android:layout_alignStart="@+id/date_select_recmed"
+        android:onClick="showTimePickerDialog"
+        android:text="Time" />
 
-        <Button
-            android:id="@+id/record_med_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="30dp"
-            android:text="RECORD MEDICATION NOW" />
+    <Button
+        android:id="@+id/record_med_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/colorAccent"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:text="RECORD MEDICATION NOW" />
 
-    </RelativeLayout>
-
-
-
-</LinearLayout>
+</RelativeLayout>

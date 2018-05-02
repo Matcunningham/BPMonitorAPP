@@ -35,6 +35,7 @@ public class SelectPatient extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RadioRecyclerAdapter mAdapter;
     private int patientId;
+    private String patName;
     private SessionManager sesh;
     private int currentPatient = -1;
 
@@ -53,8 +54,9 @@ public class SelectPatient extends AppCompatActivity {
 
         mAdapter = new RadioRecyclerAdapter(new RadioRecyclerAdapter.OnItemCheckListener() {
             @Override
-            public void onItemCheck(int patient) {
+            public void onItemCheck(int patient, String name) {
                 currentPatient = patient;
+                patName = name;
             }
 
         });
@@ -65,6 +67,7 @@ public class SelectPatient extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sesh.setCurrentPat(currentPatient);
+                sesh.setCurrentPatName(patName);
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
                 finish();
@@ -133,13 +136,15 @@ public class SelectPatient extends AppCompatActivity {
                     JSONArray json = jsonOb.getJSONArray("data");
                     String[] data = new String[json.length()];
                     List<Integer> pidData = new ArrayList<>();
+                    List<String> nameData = new ArrayList<>();
                     for(int i = 0; i < json.length(); i++)
                     {
                         JSONObject row = json.getJSONObject(i);
                         data[i] = row.getString(AppConfig.emailTag);
                         pidData.add(row.getInt(AppConfig.pidTag));
+                        nameData.add(row.getString(AppConfig.FULL_NAME));
                     }
-                    mAdapter.setPatData(data, pidData);
+                    mAdapter.setPatData(data, pidData, nameData);
                 }
                 else {
                     String message = jsonOb.getString("message");

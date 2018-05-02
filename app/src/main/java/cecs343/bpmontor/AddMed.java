@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +38,9 @@ public class AddMed extends AppCompatActivity {
 
     private SessionManager sesh;
     private int selectedPatient;
+    private String currPatientName;
+    private boolean isDoc;
+    private int patientId;
     private String newMed;
     private static String medTime;
 
@@ -47,7 +51,14 @@ public class AddMed extends AppCompatActivity {
 
         sesh = new SessionManager(getApplicationContext());
         sesh.checkLogin();
-        selectedPatient = sesh.getCurrentPat();
+        patientId = sesh.getPid();
+        isDoc = sesh.getIsDoc();
+        if(isDoc)
+        {
+            selectedPatient = sesh.getCurrentPat();
+            currPatientName = sesh.getCurrentPatName();
+            setTitle("Current Patient: " + currPatientName);
+        }
 
         final EditText etMed = findViewById(R.id.etnew_med);
         Button timePick = findViewById(R.id.time_select_newmed);
@@ -57,7 +68,21 @@ public class AddMed extends AppCompatActivity {
 
             public void onClick(View view) {
                 newMed = etMed.getText().toString().trim();
-                new InsertMedTask().execute();
+                if(TextUtils.isEmpty(newMed))
+                {
+                    Toast.makeText(getApplicationContext(), "You Must Enter a name", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    if (medTime == null) {
+                        Toast.makeText(getApplicationContext(), "You Must Choose a Time", Toast.LENGTH_LONG).show();
+                    } else {
+                        if (isDoc) {
+                            new InsertMedTask(selectedPatient).execute();
+                        } else {
+                            new InsertMedTask(patientId).execute();
+                        }
+                    }
+                }
             }
         });
     }
@@ -115,6 +140,13 @@ public class AddMed extends AppCompatActivity {
 
     public class InsertMedTask extends AsyncTask<Void, Void, String> {
 
+        private int id;
+
+        InsertMedTask(int pid)
+        {
+            id = pid;
+        }
+
         @Override
         protected String doInBackground(Void... params) {
             try {
@@ -125,7 +157,7 @@ public class AddMed extends AppCompatActivity {
                 httpURLConnection.setDoInput(true);
                 OutputStream outStream = httpURLConnection.getOutputStream();
                 BufferedWriter bfWriter = new BufferedWriter(new OutputStreamWriter(outStream, "UTF-8"));
-                String postData = URLEncoder.encode("pid", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(selectedPatient), "UTF-8") + "&"
+                String postData = URLEncoder.encode("pid", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(id), "UTF-8") + "&"
                         + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(newMed, "UTF-8") + "&"
                         + URLEncoder.encode("tim", "UTF-8") + "=" + URLEncoder.encode(medTime, "UTF-8");
                 bfWriter.write(postData);

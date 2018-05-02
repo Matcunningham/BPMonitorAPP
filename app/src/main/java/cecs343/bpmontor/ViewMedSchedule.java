@@ -34,6 +34,7 @@ public class ViewMedSchedule extends AppCompatActivity {
     private SessionManager sesh;
     private int patientId;
     private boolean isDoc;
+    private String currPatientName;
     private int selectedPatient;
 
     @Override
@@ -47,6 +48,8 @@ public class ViewMedSchedule extends AppCompatActivity {
         if(isDoc)
         {
             selectedPatient = sesh.getCurrentPat();
+            currPatientName = sesh.getCurrentPatName();
+            setTitle("Current Patient: " + currPatientName);
         }
 
         mRecyclerView = (RecyclerView) findViewById(R.id.medsched_recycle);

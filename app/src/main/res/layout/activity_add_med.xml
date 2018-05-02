@@ -4,27 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cecs343.bpmontor.AddMed">
+    tools:context="cecs343.bpmontor.AddMed"
+    android:background="@color/colorPrimaryDark">
+
+    <!--<TextView             TITLE if wanted-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="#07000000"-->
+        <!--android:text="Add Medication"-->
+        <!--android:textSize="35sp"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:gravity="center_horizontal"/>-->
 
     <EditText
         android:id="@+id/etnew_med"
-        android:layout_width="384dp"
+        android:layout_width="match_parent"
         android:layout_height="75dp"
         android:layout_marginTop="84dp"
         android:hint="New Medicine Name"
+        android:textColorHint="@color/colorAccent"
         android:inputType="text"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/time_select_newmed"
-        android:layout_width="368dp"
-        android:layout_height="74dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="68dp"
         android:layout_marginStart="8dp"
         android:onClick="showTimePickerDialog"
         android:text="Select Time"
+        android:background="@color/colorSecondaryAccent"
+        android:textColor="@color/white"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -39,6 +54,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="ADD NOW"
+        android:background="@color/colorAccent"
+        android:textColor="@color/white"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/time_select_newmed" />

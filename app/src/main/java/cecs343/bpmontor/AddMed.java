@@ -120,7 +120,10 @@ public class AddMed extends AppCompatActivity {
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            // Do something with the time chosen by the user
+            if(hourOfDay < 5 && hourOfDay > 0)
+            {
+                Toast.makeText(getActivity(), "WARNING: Time is set during sleep hours", Toast.LENGTH_LONG).show();
+            }
             String hr;
             String min;
             if (hourOfDay < 10) {
@@ -133,8 +136,8 @@ public class AddMed extends AppCompatActivity {
             } else {
                 min = String.valueOf(minute);
             }
-            medTime = hr + min +":00";
-            Toast.makeText(getActivity(), medTime, Toast.LENGTH_LONG).show();
+            medTime = hr + min;
+
         }
     }
 

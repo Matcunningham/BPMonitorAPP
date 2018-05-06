@@ -34,10 +34,12 @@ public class SelectPatient extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private RadioRecyclerAdapter mAdapter;
+    private View mProgressView;
     private int patientId;
     private String patName;
     private SessionManager sesh;
     private int currentPatient = -1;
+    private Button retry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class SelectPatient extends AppCompatActivity {
         sesh.checkLogin();
         patientId = sesh.getPid();
 
+        mProgressView = findViewById(R.id.selpatient_progress);
         Button selPatient = (Button) findViewById(R.id.select_patient);
         mRecyclerView = (RecyclerView) findViewById(R.id.sel_patient_recycle);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -61,16 +64,36 @@ public class SelectPatient extends AppCompatActivity {
 
         });
         mRecyclerView.setAdapter(mAdapter);
+
+        retry = (Button) findViewById(R.id.retry_selpatient);
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        mProgressView.setVisibility(View.VISIBLE);
         new SelectPatientTask().execute();
 
         selPatient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sesh.setCurrentPat(currentPatient);
-                sesh.setCurrentPatName(patName);
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);
-                finish();
+                if(currentPatient != -1) {
+                    sesh.setCurrentPat(currentPatient);
+                    sesh.setCurrentPatName(patName);
+                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(i);
+                    finish();
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "You must select a patient", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRecyclerView.setVisibility(View.INVISIBLE);
+                mProgressView.setVisibility(View.VISIBLE);
+                retry.setVisibility(View.GONE);
+                new SelectPatientTask().execute();
             }
         });
     }
@@ -94,6 +117,8 @@ public class SelectPatient extends AppCompatActivity {
                 URL url = new URL(AppConfig.URL_SELPAT);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setConnectTimeout(AppConfig.HTTP_TIME_OUT);
+
                 httpURLConnection.setDoOutput(true);
                 httpURLConnection.setDoInput(true);
                 OutputStream outStream = httpURLConnection.getOutputStream();
@@ -105,6 +130,7 @@ public class SelectPatient extends AppCompatActivity {
                 outStream.close();
 
                 InputStream inStream = httpURLConnection.getInputStream();
+                httpURLConnection.setReadTimeout(AppConfig.HTTP_TIME_OUT);
                 BufferedReader bfReader = new BufferedReader(new InputStreamReader(inStream, "iso-8859-1"));
                 String result = "";
                 String line = "";
@@ -118,7 +144,12 @@ public class SelectPatient extends AppCompatActivity {
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
-            } catch (IOException e) {
+            }
+            catch(java.net.SocketTimeoutException tOut)
+            {
+                this.cancel(true);
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -127,7 +158,8 @@ public class SelectPatient extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final String result) {
-            Toast.makeText(getApplicationContext(), "Getting Patients...", Toast.LENGTH_SHORT).show();
+            mProgressView.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
             try {
                 JSONObject jsonOb = new JSONObject(result);
                 boolean status = jsonOb.getBoolean(AppConfig.SUCCESS);
@@ -153,6 +185,13 @@ public class SelectPatient extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mProgressView.setVisibility(View.GONE);
+            retry.setVisibility(View.VISIBLE);
+            Toast.makeText(getApplicationContext(), "Time Out... TRY AGAIN", Toast.LENGTH_LONG).show();
         }
     }
 

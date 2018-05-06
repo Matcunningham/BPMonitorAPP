@@ -9,6 +9,9 @@ import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -37,6 +40,9 @@ public class ViewBPHistory extends AppCompatActivity {
     private String currPatientName;
     private boolean isDoc;
     private int selectedPatient;
+    private View mProgressView;
+    private Button retry;
+    private TextView heading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +59,18 @@ public class ViewBPHistory extends AppCompatActivity {
             setTitle("Current Patient: " + currPatientName);
         }
 
+        heading = findViewById(R.id.bphist_heading);
+        mProgressView = findViewById(R.id.bphist_progress);
         mRecyclerView = (RecyclerView) findViewById(R.id.bp);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
+        retry = (Button) findViewById(R.id.retry);
 
         mAdapter = new BpRvAdapter(R.layout.bp_list_item);
         mRecyclerView.setAdapter(mAdapter);
 
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        mProgressView.setVisibility(View.VISIBLE);
         if(isDoc)
         {
             new BpQueryTask(selectedPatient).execute();
@@ -68,6 +79,23 @@ public class ViewBPHistory extends AppCompatActivity {
         {
             new BpQueryTask(patientId).execute();
         }
+
+        retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRecyclerView.setVisibility(View.INVISIBLE);
+                mProgressView.setVisibility(View.VISIBLE);
+                retry.setVisibility(View.GONE);
+                if(isDoc)
+                {
+                    new BpQueryTask(selectedPatient).execute();
+                }
+                else
+                {
+                    new BpQueryTask(patientId).execute();
+                }
+            }
+        });
     }
 
     @Override
@@ -96,6 +124,8 @@ public class ViewBPHistory extends AppCompatActivity {
                 URL url = new URL(AppConfig.URL_BPHIST);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setConnectTimeout(AppConfig.HTTP_TIME_OUT);
+
                 httpURLConnection.setDoOutput(true);
                 httpURLConnection.setDoInput(true);
                 OutputStream outStream = httpURLConnection.getOutputStream();
@@ -107,6 +137,7 @@ public class ViewBPHistory extends AppCompatActivity {
                 outStream.close();
 
                 InputStream inStream = httpURLConnection.getInputStream();
+                httpURLConnection.setReadTimeout(AppConfig.HTTP_TIME_OUT);
                 BufferedReader bfReader = new BufferedReader(new InputStreamReader(inStream, "iso-8859-1"));
                 String result = "";
                 String line = "";
@@ -120,7 +151,12 @@ public class ViewBPHistory extends AppCompatActivity {
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
-            } catch (IOException e) {
+            }
+            catch(java.net.SocketTimeoutException tOut)
+            {
+                this.cancel(true);
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -129,41 +165,45 @@ public class ViewBPHistory extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final String result) {
-            String tabSep = "\t\t\t\t\t\t\t\t\t";
-            Toast.makeText(getApplicationContext(), "working...", Toast.LENGTH_SHORT).show();
+            mProgressView.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
             try {
-                //JSONArray json = new JSONArray(result);
                 JSONObject jsonOb = new JSONObject(result);
                 boolean status = jsonOb.getBoolean(AppConfig.SUCCESS);
                 if(status)
                 {
+                    String headingFormat = String.format("%-14s %-10s %-8s"," DATE"," TIME"," BP");
+                    heading.setText(headingFormat);
                     JSONArray json = jsonOb.getJSONArray("data");
                     String[] data = new String[json.length()];
                     for(int i = 0; i < json.length(); i++)
                     {
                         JSONObject row = json.getJSONObject(i);
-                        data[i] = row.getString(AppConfig.dateTag) + tabSep + row.getString(AppConfig.timeTag) +
-                                tabSep + row.getString(AppConfig.sysTag) + "\t/\t" + row.getString(AppConfig.diaTag);
-
+                        String date =  row.getString(AppConfig.dateTag);
+                        String time =  row.getString(AppConfig.timeTag);
+                        String bp = row.getString(AppConfig.sysTag) + "\t/\t" + row.getString(AppConfig.diaTag);
+                        time = time.substring(0, time.length()-3);
+                        String lineFormat = String.format("%-12s %-10s %-8s",date,time,bp);
+                        data[i] = lineFormat;
 
                     }
                     mAdapter.setBpData(data);
 
                 }
                 else {
-                    //JSONObject jsonOb = new JSONObject(result);
                     String message = jsonOb.getString("message");
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
-
-
         }
 
-
+        @Override
+        protected void onCancelled() {
+            mProgressView.setVisibility(View.GONE);
+            retry.setVisibility(View.VISIBLE);
+            Toast.makeText(getApplicationContext(), "Time Out... TRY AGAIN", Toast.LENGTH_LONG).show();
+        }
     }
 }

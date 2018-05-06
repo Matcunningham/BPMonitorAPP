@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cecs343.bpmontor.MainActivity">
+    tools:context="cecs343.bpmontor.MainActivity"
+    android:background="@color/colorPrimaryDark">
 
     <TextView
         android:id="@+id/patienttitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:layout_margin="5dp"
         android:gravity="center"
         android:text="Patient"
         android:textAllCaps="true"
@@ -31,6 +32,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/view_med_sched"
+                android:background="@color/blueGray"
+                android:layout_margin="5dp"
                 android:textSize="20sp" />
 
             <Button
@@ -38,6 +41,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view_med_sched"
+                android:background="@color/blueGray"
+                android:layout_margin="5dp"
                 android:text="@string/view_med_hist"
                 android:textSize="20sp" />
 
@@ -46,6 +51,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view_med_hist"
+                android:background="@color/blueGray"
+                android:layout_margin="5dp"
                 android:text="@string/view_bp_hist"
                 android:textSize="20sp" />
 
@@ -54,6 +61,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view_bp_hist"
+                android:background="@color/blueGray2"
+                android:layout_margin="5dp"
                 android:textSize="20sp"
                 android:text="Update Med Schedule" />
 
@@ -62,7 +71,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/update_sched"
+                android:background="@color/blueGrayDark"
                 android:textSize="20sp"
+                android:layout_margin="5dp"
                 android:text="@string/record_bp" />
 
             <Button
@@ -70,7 +81,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/record_bp"
+                android:layout_margin="5dp"
                 android:textSize="20sp"
+                android:background="@color/blueGrayDark"
                 android:text="@string/record_med" />
 
         </RelativeLayout>
@@ -84,15 +97,18 @@
         android:layout_above="@+id/logout"
         android:padding="5dp"
         android:textSize="20sp"
+        android:layout_margin="5dp"
+        android:background="@color/colorAccent"
         android:text="Add/Update Doctor" />
 
     <Button
         android:id="@+id/logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_alignParentBottom="true"
+        android:background="@color/colorAccent"
         android:text="LOGOUT"
+        android:layout_margin="5dp"
         android:textSize="20sp" />
 
 </RelativeLayout>

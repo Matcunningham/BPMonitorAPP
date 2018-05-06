@@ -89,12 +89,16 @@ public class DeleteMeds extends AppCompatActivity {
         delMeds.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(android.view.View view) {
-                if(isDoc) {
-                    new DelMedTask(selectedPatient).execute();
-                }
-                else
+                if(medsSelected.isEmpty())
                 {
-                    new DelMedTask(patientId).execute();
+                    Toast.makeText(getApplicationContext(), "You must select at least one", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if (isDoc) {
+                        new DelMedTask(selectedPatient).execute();
+                    } else {
+                        new DelMedTask(patientId).execute();
+                    }
                 }
             }
         });

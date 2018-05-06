@@ -23,7 +23,7 @@
         android:layout_marginTop="84dp"
         android:hint="New Medicine Name"
         android:textColorHint="@color/colorAccent"
-        android:inputType="text"
+        android:inputType="textCapCharacters"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

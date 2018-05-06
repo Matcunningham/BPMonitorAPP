@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -36,6 +37,7 @@ public class ViewMedSchedule extends AppCompatActivity {
     private boolean isDoc;
     private String currPatientName;
     private int selectedPatient;
+    private View mProgressView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class ViewMedSchedule extends AppCompatActivity {
             setTitle("Current Patient: " + currPatientName);
         }
 
+        mProgressView = findViewById(R.id.medsched_progress);
         mRecyclerView = (RecyclerView) findViewById(R.id.medsched_recycle);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -59,6 +62,8 @@ public class ViewMedSchedule extends AppCompatActivity {
         mAdapter = new BpRvAdapter(R.layout.bp_list_item);
         mRecyclerView.setAdapter(mAdapter);
 
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        mProgressView.setVisibility(View.VISIBLE);
         if(isDoc)
         {
             new MedSchedQueryTask(selectedPatient).execute();
@@ -128,6 +133,8 @@ public class ViewMedSchedule extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final String result) {
+            mProgressView.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
             try {
                 JSONObject jsonOb = new JSONObject(result);
                 boolean status = jsonOb.getBoolean(AppConfig.SUCCESS);
@@ -140,8 +147,9 @@ public class ViewMedSchedule extends AppCompatActivity {
                         JSONObject row = json.getJSONObject(i);
                         String drugName =  row.getString(AppConfig.mednameTag);
                         String time = row.getString(AppConfig.timeTag);
+                        time = time.substring(0, time.length()-3);
 
-                        String lineFormat = String.format("%-55s %-18s",drugName,time);
+                        String lineFormat = String.format("%-50s %-6s",drugName,time);
                         data[i] = lineFormat;
 
                     }

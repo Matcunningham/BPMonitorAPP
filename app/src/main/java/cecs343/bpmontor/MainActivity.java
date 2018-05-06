@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent i = new Intent(getApplicationContext(), SelectPatient.class);
                     startActivity(i);
+
                 }
             });
 

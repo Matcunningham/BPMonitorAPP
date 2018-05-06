@@ -83,7 +83,13 @@ public class RecordMed extends AppCompatActivity {
         recordMed.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(android.view.View view) {
-                new RecordMedTask(patientId).execute();
+                if(medsSelected.isEmpty() || date == null || time == null)
+                {
+                    Toast.makeText(getApplicationContext(), "All fields must be selected", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    new RecordMedTask(patientId).execute();
+                }
             }
         });
     }

@@ -6,21 +6,21 @@ package cecs343.bpmontor;
 
 public class AppConfig {
     // Server user login/register url
-    public static final String URL_LOGIN = "http://bpmon.heliohost.org/login.php";
-    public static final String URL_REGISTER = "http://bpmon.heliohost.org/register.php";
-    public static final String URL_ISDOCTOR = "http://bpmon.heliohost.org/checkDoctor.php";
-    public static final String URL_BPHIST   = "http://bpmon.heliohost.org/bpHist.php";
-    public static final String URL_MEDHIST = "http://bpmon.heliohost.org/medHist.php";
-    public static final String URL_MEDSCHED = "http://bpmon.heliohost.org/medSched.php";
-    public static final String URL_RECBP   = "http://bpmon.heliohost.org/recordBp.php";
-    public static final String URL_RECMED   = "http://bpmon.heliohost.org/recordMed.php";
-    public static final String URL_SELPAT   = "http://bpmon.heliohost.org/selectPatient.php";
-    public static final String URL_UPDATESCHED   = "http://bpmon.heliohost.org/updateSched.php";
-    public static final String URL_ADDMED   = "http://bpmon.heliohost.org/addMed.php";
-    public static final String URL_DELMEDS   = "http://bpmon.heliohost.org/delMeds.php";
-    public static final String URL_ADDDOC   = "http://bpmon.heliohost.org/addDoc.php";
+    public static final String URL_LOGIN = "http://matcunningham.com/login.php";
+    public static final String URL_REGISTER = "http://matcunningham.com/register.php";
+    public static final String URL_ISDOCTOR = "http://matcunningham.com/checkDoctor.php";
+    public static final String URL_BPHIST   = "http://matcunningham.com/bpHist.php";
+    public static final String URL_MEDHIST = "http://matcunningham.com/medHist.php";
+    public static final String URL_MEDSCHED = "http://matcunningham.com/medSched.php";
+    public static final String URL_RECBP   = "http://matcunningham.com/recordBp.php";
+    public static final String URL_RECMED   = "http://matcunningham.com/recordMed.php";
+    public static final String URL_SELPAT   = "http://matcunningham.com/selectPatient.php";
+    public static final String URL_UPDATESCHED   = "http://matcunningham.com/updateSched.php";
+    public static final String URL_ADDMED   = "http://matcunningham.com/addMed.php";
+    public static final String URL_DELMEDS   = "http://matcunningham.com/delMeds.php";
+    public static final String URL_ADDDOC   = "http://matcunningham.com/addDoc.php";
 
-    //JSON TAGS
+    // JSON TAGS
     public static final String pidTag = "pid";
     public static final String errorTag = "error";
     public static final String errorMessageTag = "error_msg";
@@ -34,5 +34,8 @@ public class AppConfig {
     public static final String SUCCESS = "success";
     public static final String IS_DOC = "isDoctor";
     public static final String FULL_NAME = "fullname";
+
+    // TIMEOUT FOR HTTP CONNECTION
+    public static final int HTTP_TIME_OUT = 8000;
 
 }

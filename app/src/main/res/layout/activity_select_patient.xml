@@ -7,8 +7,17 @@
     tools:context="cecs343.bpmontor.RecordMed"
     android:orientation="vertical"
     android:weightSum="10"
-    android:background="@color/colorAccent">
+    android:background="@color/colorPrimaryDark">
 
+    <ProgressBar
+        android:id="@+id/selpatient_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_horizontal"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/sel_patient_recycle"
@@ -33,4 +42,16 @@
         android:textSize="20sp"
         android:text="SELECT PATIENT" />
 
+    <Button
+        android:id="@+id/retry_selpatient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="200dp"
+        android:paddingTop="10dp"
+        android:background="@color/colorAccent"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:visibility="gone"
+        android:text="RETRY" />
 </RelativeLayout>

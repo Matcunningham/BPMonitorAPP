@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -27,13 +26,12 @@ import java.net.URLEncoder;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private UserRegTask regTask = null;
     private Button btnRegister;
     private Button btnLinkToLogin;
     private EditText inputName;
     private EditText inputEmail;
     private EditText inputPassword;
-
+    private View mProgressView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
         inputPassword = (EditText) findViewById(R.id.password);
         btnRegister = (Button) findViewById(R.id.btnRegister);
         btnLinkToLogin = (Button) findViewById(R.id.btnLinkToLoginScreen);
+        mProgressView = findViewById(R.id.reg_progress);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -52,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
                 if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty() && email.contains("@") && password.length() > 3) {
-                    Toast.makeText(getApplicationContext(), "Working", Toast.LENGTH_LONG).show();
+                    mProgressView.setVisibility(View.VISIBLE);
                     new UserRegTask(email, password, name).execute();
                 } else {
                     Toast.makeText(getApplicationContext(), "Password must be 6 or more characters. Email must be valid.", Toast.LENGTH_LONG).show();
@@ -127,6 +126,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final String result) {
+            mProgressView.setVisibility(View.GONE);
             try {
                 JSONObject json = new JSONObject(result);
                 Boolean errorStatus = json.getBoolean(AppConfig.errorTag);

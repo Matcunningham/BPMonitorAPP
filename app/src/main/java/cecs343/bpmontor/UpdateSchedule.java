@@ -42,6 +42,7 @@ public class UpdateSchedule extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private MedChBoxRvAdapter mAdapter;
+    private View mProgressView;
     private SessionManager sesh;
     private int selectedPatient;
     private String currPatientName;
@@ -69,6 +70,7 @@ public class UpdateSchedule extends AppCompatActivity {
         Button timePick = findViewById(R.id.time_select_update);
         Button updateSched = findViewById(R.id.update_sched_btn);
 
+        mProgressView = findViewById(R.id.updatesched_progress);
         mRecyclerView = (RecyclerView) findViewById(R.id.update_recycle);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -86,6 +88,8 @@ public class UpdateSchedule extends AppCompatActivity {
         });
         mRecyclerView.setAdapter(mAdapter);
 
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        mProgressView.setVisibility(View.VISIBLE);
         if(isDoc) {
             new MedSchedQueryTask(selectedPatient).execute();
         }
@@ -96,12 +100,17 @@ public class UpdateSchedule extends AppCompatActivity {
         updateSched.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(android.view.View view) {
-                if(isDoc) {
-                    new UpdateSchedTask(selectedPatient).execute();
-                }
-                else
+                if(newTime == null || medsSelected.isEmpty())
                 {
-                    new UpdateSchedTask(patientId).execute();
+                    Toast.makeText(getApplicationContext(), "All fields must be selected", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    mProgressView.setVisibility(View.VISIBLE);
+                    if (isDoc) {
+                        new UpdateSchedTask(selectedPatient).execute();
+                    } else {
+                        new UpdateSchedTask(patientId).execute();
+                    }
                 }
             }
         });
@@ -140,7 +149,10 @@ public class UpdateSchedule extends AppCompatActivity {
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            // Do something with the time chosen by the user
+            if(hourOfDay < 5 && hourOfDay > 0)
+            {
+                Toast.makeText(getActivity(), "WARNING: Time is set during sleep hours", Toast.LENGTH_LONG).show();
+            }
             String hr;
             String min;
             if (hourOfDay < 10) {
@@ -174,7 +186,7 @@ public class UpdateSchedule extends AppCompatActivity {
                 for(int i = 0; i < medsSelected.size(); i++) {
                     String oldTime = "";
                     String med = "";
-                    StringTokenizer st = new StringTokenizer(medsSelected.get(i), "\t");
+                    StringTokenizer st = new StringTokenizer(medsSelected.get(i), "\t\t\t");
                     while (st.hasMoreTokens()) {
                         med = st.nextToken();
                         oldTime = st.nextToken();
@@ -221,6 +233,7 @@ public class UpdateSchedule extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final ArrayList<String> result) {
+            mProgressView.setVisibility(View.GONE);
             try {
                 boolean flag = true;
                 for(int i = 0; i < result.size(); i++) {
@@ -294,6 +307,8 @@ public class UpdateSchedule extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final String result) {
+            mProgressView.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
             try {
                 JSONObject jsonOb = new JSONObject(result);
                 boolean status = jsonOb.getBoolean(AppConfig.SUCCESS);
@@ -307,7 +322,7 @@ public class UpdateSchedule extends AppCompatActivity {
                         String drugName =  row.getString(AppConfig.mednameTag);
                         String time = row.getString(AppConfig.timeTag);
 
-                        String lineFormat = drugName + "\t\t" + time;
+                        String lineFormat = drugName + "\t\t\t" + time;
                         data[i] = lineFormat;
 
                     }

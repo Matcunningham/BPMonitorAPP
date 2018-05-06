@@ -9,6 +9,9 @@
     <color name="colorSecondaryAccent">#8b8f94</color>
 
     <!-- Possible Colors -->
+    <color name="blueGray">#37474f</color>
+    <color name="blueGrayDark">#102027</color>
+    <color name="blueGray2">#29434e</color>
     <color name="bg_login">#26ae90</color>
     <color name="bg_register">#2e3237</color>
     <color name="bg_main">#428bca</color>

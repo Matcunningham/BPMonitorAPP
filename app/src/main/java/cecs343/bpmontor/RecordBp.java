@@ -66,7 +66,17 @@ public class RecordBp extends AppCompatActivity {
             public void onClick(View view) {
                 sys = etSys.getText().toString().trim();
                 dia = etDia.getText().toString().trim();
-                new InsertBpTask(patientId).execute();
+                if(sys.isEmpty() || dia.isEmpty() || date == null || time == null)
+                {
+                    Toast.makeText(getApplicationContext(), "You must select all fields", Toast.LENGTH_SHORT).show();
+                }
+                else if(Integer.valueOf(dia) > Integer.valueOf(sys))
+                {
+                    Toast.makeText(getApplicationContext(), "Invalid Entry! Check BP Values", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    new InsertBpTask(patientId).execute();
+                }
             }
         });
     }
@@ -111,7 +121,6 @@ public class RecordBp extends AppCompatActivity {
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            // Do something with the date chosen by the user
             month = month + 1;
             String mth;
             String dy;
@@ -127,7 +136,6 @@ public class RecordBp extends AppCompatActivity {
             }
 
             date = String.valueOf(year) + mth + dy;
-            //Toast.makeText(getActivity(), date, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -147,7 +155,6 @@ public class RecordBp extends AppCompatActivity {
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            // Do something with the time chosen by the user
             String hr;
             String min;
             if (hourOfDay < 10) {
@@ -160,8 +167,7 @@ public class RecordBp extends AppCompatActivity {
             } else {
                 min = String.valueOf(minute);
             }
-            time = hr + min + ":00";
-            Toast.makeText(getActivity(), time, Toast.LENGTH_LONG).show();
+            time = hr + min;
         }
     }
 

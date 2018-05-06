@@ -21,9 +21,9 @@
     <string name="btn_logout">LOGOUT</string>
 
     <!-- Main Activity Buttons -->
-    <string name="view_med_hist">View Medication History</string>
-    <string name="view_bp_hist">View Blood Pressure History</string>
-    <string name="view_med_sched">View Medication Schedule</string>
+    <string name="view_med_hist">Medication History</string>
+    <string name="view_bp_hist">Blood Pressure History</string>
+    <string name="view_med_sched">Medication Schedule</string>
     <string name="record_bp">Record Blood Pressure</string>
     <string name="record_med">Record Taken Medication</string>
 

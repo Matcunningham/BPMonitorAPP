@@ -55,6 +55,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
+ * This Class utilizes the android studio login activity template
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
@@ -87,6 +88,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             startActivity(i);
             finish();
         }
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -96,7 +98,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 populateAutoComplete();
             }
         });
-        //populateAutoComplete();
 
         Button btnLinkToRegister = findViewById(R.id.btnLinkToRegScreen);
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -225,7 +226,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // perform the user login attempt.
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
-            Toast.makeText(getApplicationContext(), "working...", Toast.LENGTH_LONG).show();
             mAuthTask.execute((Void) null);
         }
     }
@@ -344,8 +344,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected String doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
             try {
                 URL url = new URL(AppConfig.URL_LOGIN);
                 HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
@@ -399,7 +397,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 else {
                     int pid = json.getInt(AppConfig.pidTag);
                     new SessionManager.CheckDoctorTask(pid).execute().get(); // Get makes the background task finish before continuing
-                    Toast.makeText(getApplicationContext(), "USER: " + pid, Toast.LENGTH_LONG).show();
                     sesh.createLoginSession(pid); // Stores user in shared preferences
                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(i);

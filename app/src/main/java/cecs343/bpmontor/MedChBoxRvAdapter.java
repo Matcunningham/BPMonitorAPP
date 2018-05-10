@@ -18,6 +18,7 @@ import java.util.List;
  * Created by Mat on 4/22/2018.
  */
 
+// Adapter for recycler view using check boxes for selections
 public class MedChBoxRvAdapter extends RecyclerView.Adapter<MedChBoxRvAdapter.ItemViewHolder> {
 
     private String[] dataSet;

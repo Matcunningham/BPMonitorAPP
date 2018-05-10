@@ -110,13 +110,11 @@ public class RecordBp extends AppCompatActivity {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
             final Calendar cal = Calendar.getInstance();
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);
             int day = cal.get(Calendar.DAY_OF_MONTH);
 
-            // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(getActivity(), DatePickerDialog.THEME_HOLO_DARK, this, year, month, day);
         }
 
@@ -144,12 +142,11 @@ public class RecordBp extends AppCompatActivity {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current time as the default values for the picker
+            // Use the current time as the default
             final Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
 
-            // Create a new instance of TimePickerDialog and return it
             return new TimePickerDialog(getActivity(), TimePickerDialog.THEME_HOLO_DARK, this, hour, minute,
                     DateFormat.is24HourFormat(getActivity()));
         }
@@ -182,8 +179,6 @@ public class RecordBp extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
             try {
                 URL url = new URL(AppConfig.URL_RECBP);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();

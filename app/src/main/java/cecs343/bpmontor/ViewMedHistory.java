@@ -32,6 +32,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 public class ViewMedHistory extends AppCompatActivity {
+
     private RecyclerView mRecyclerView;
     private BpRvAdapter mAdapter;
     private SessionManager sesh;
@@ -100,6 +101,7 @@ public class ViewMedHistory extends AppCompatActivity {
 
     }
 
+    // For returning to parent activity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -157,7 +159,7 @@ public class ViewMedHistory extends AppCompatActivity {
             }
             catch(java.net.SocketTimeoutException tOut)
             {
-                this.cancel(true);
+                this.cancel(true); // Invokes onCancelled Method below
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -190,7 +192,7 @@ public class ViewMedHistory extends AppCompatActivity {
                         data[i] = lineFormat;
 
                     }
-                    mAdapter.setBpData(data);
+                    mAdapter.setBpData(data); // Setting rows for recycler view
 
                 }
                 else {

@@ -48,5 +48,5 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:visibility="gone"
-        android:text="RETRY" />
+        android:text="@string/retry" />
 </RelativeLayout>

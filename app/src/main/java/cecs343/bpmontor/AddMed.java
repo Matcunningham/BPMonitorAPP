@@ -36,6 +36,7 @@ import java.util.Calendar;
 
 public class AddMed extends AppCompatActivity {
 
+    // Used for session management and user input
     private SessionManager sesh;
     private int selectedPatient;
     private String currPatientName;
@@ -60,6 +61,7 @@ public class AddMed extends AppCompatActivity {
             setTitle("Current Patient: " + currPatientName);
         }
 
+        // User Interface References
         final EditText etMed = findViewById(R.id.etnew_med);
         Button timePick = findViewById(R.id.time_select_newmed);
         Button addMed = findViewById(R.id.record_newmed_btn);
@@ -87,6 +89,7 @@ public class AddMed extends AppCompatActivity {
         });
     }
 
+    // For upward navigation, take user back to parent activity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -98,6 +101,7 @@ public class AddMed extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // Shows timepicker on button click
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         FragmentManager fragMan = getFragmentManager();
@@ -109,16 +113,17 @@ public class AddMed extends AppCompatActivity {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current time as the default values for the picker
+            // Uses the current time as the default value for the time picker
             final Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
 
-            // Create a new instance of TimePickerDialog and return it
+            // Creates a new instance of TimePickerDialog and return it
             return new TimePickerDialog(getActivity(), TimePickerDialog.THEME_HOLO_DARK, this, hour, minute,
                     DateFormat.is24HourFormat(getActivity()));
         }
 
+        // Transforms the time into a string readable by mySQL
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             if(hourOfDay < 5 && hourOfDay > 0)
             {
@@ -141,6 +146,7 @@ public class AddMed extends AppCompatActivity {
         }
     }
 
+    // Asynchronous background task for inserting medication
     public class InsertMedTask extends AsyncTask<Void, Void, String> {
 
         private int id;
@@ -153,6 +159,7 @@ public class AddMed extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... params) {
             try {
+                // HTTP POST Request, returns JSON String for parsing.
                 URL url = new URL(AppConfig.URL_ADDMED);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
@@ -204,9 +211,6 @@ public class AddMed extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
         }
     }
-
 }

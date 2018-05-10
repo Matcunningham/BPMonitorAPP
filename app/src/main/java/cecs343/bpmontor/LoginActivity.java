@@ -82,6 +82,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         sesh = new SessionManager(getApplicationContext());
+        // Takes user to main screen if already logged in.
         if(sesh.isLoggedIn())
         {
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
@@ -91,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN); // Hides keyboard
         mEmailView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,6 +113,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        // Takes user to register activity
         btnLinkToRegister.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
@@ -142,6 +144,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         getLoaderManager().initLoader(0, null, this);
     }
 
+    // Needed for auto complete
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
@@ -274,6 +277,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    // Used for auto complete
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
@@ -291,6 +295,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
     }
 
+    // For auto complete
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<>();
@@ -345,6 +350,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected String doInBackground(Void... params) {
             try {
+                // HTTP POST Request, returns JSON String for parsing.
                 URL url = new URL(AppConfig.URL_LOGIN);
                 HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
@@ -409,8 +415,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-
-
         }
 
         @Override

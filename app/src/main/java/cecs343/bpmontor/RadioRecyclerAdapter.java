@@ -18,6 +18,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+// Adapter for Select Patient, only allows one to be selected
 public class RadioRecyclerAdapter extends RecyclerView.Adapter<RadioRecyclerAdapter.ItemViewHolder> {
 
 private String[] dataSet;
@@ -79,16 +80,14 @@ interface OnItemCheckListener {
 
         holder.patItemView.setText(textToSet);
 
-
-
         final int pid = idData.get(position);
-
 
         holder.rButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 RadioButton rb = (RadioButton) v;
                 int clickedPos = position;
 
+                // unchecks previously selected item
                 if(((RadioButton) rb).isChecked())
                 {
                     if(lastChecked != null)
@@ -99,7 +98,6 @@ interface OnItemCheckListener {
                     lastChecked = rb;
                     lastSelectedPos = clickedPos;
                 }
-
             }
         });
     }

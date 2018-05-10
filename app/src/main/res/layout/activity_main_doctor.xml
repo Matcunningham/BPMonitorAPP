@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Doctor"
+        android:layout_margin="10dp"
+        android:text="@string/hello_doctor"
         android:textAllCaps="true"
         android:textSize="20sp" />
 
@@ -29,8 +30,8 @@
                 android:id="@+id/sel_patient_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                android:text="SELECT PATIENT"
+                android:layout_margin="3dp"
+                android:text="@string/select_patient"
                 android:background="@color/colorAccent"
                 android:textSize="20sp" />
 
@@ -40,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/sel_patient_btn"
                 android:background="@color/blueGray"
-                android:layout_margin="2dp"
+                android:layout_margin="3dp"
                 android:text="@string/view_med_sched"
                 android:textSize="20sp" />
 
@@ -50,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view_med_sched"
                 android:background="@color/blueGray"
-                android:layout_margin="2dp"
+                android:layout_margin="3dp"
                 android:text="@string/view_med_hist"
                 android:textSize="20sp" />
 
@@ -59,7 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view_med_hist"
-                android:layout_margin="2dp"
+                android:layout_margin="3dp"
                 android:background="@color/blueGray"
                 android:text="@string/view_bp_hist"
                 android:textSize="20sp" />
@@ -70,9 +71,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view_bp_hist"
                 android:background="@color/blueGray2"
-                android:layout_margin="2dp"
+                android:layout_margin="3dp"
                 android:textSize="20sp"
-                android:text="Update Med Schedule" />
+                android:text="@string/update_med_schedule" />
 
             <Button
                 android:id="@+id/record_bp"
@@ -80,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/update_sched"
                 android:background="@color/blueGrayDark"
-                android:layout_margin="2dp"
+                android:layout_margin="3dp"
                 android:textSize="20sp"
                 android:text="@string/record_bp" />
 
@@ -90,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/record_bp"
                 android:background="@color/blueGrayDark"
-                android:layout_margin="2dp"
+                android:layout_margin="3dp"
                 android:textSize="20sp"
                 android:text="@string/record_med" />
 
@@ -104,10 +105,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/logout"
-        android:layout_margin="2dp"
+        android:layout_margin="3dp"
         android:textSize="20sp"
         android:background="@color/colorAccent"
-        android:text="Add/Update Doctor" />
+        android:text="@string/add_update_doctor" />
 
 
     <Button
@@ -118,5 +119,5 @@
         android:layout_margin="4dp"
         android:textSize="20sp"
         android:background="@color/colorAccent"
-        android:text="LOGOUT" />
+        android:text="@string/logout" />
 </RelativeLayout>

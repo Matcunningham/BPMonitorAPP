@@ -66,6 +66,7 @@ public class DeleteMeds extends AppCompatActivity {
         mRecyclerView.setLayoutManager(layoutManager);
 
         mAdapter = new MedChBoxRvAdapter(R.layout.medcheckbox_list_item, new MedChBoxRvAdapter.OnItemCheckListener() {
+            // Overrides interface methods, adds/removes checked medication to array list for deletion
             @Override
             public void onItemCheck(String med) {
                 medsSelected.add(med);
@@ -104,6 +105,7 @@ public class DeleteMeds extends AppCompatActivity {
         });
     }
 
+    // For upward navigation
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -128,7 +130,7 @@ public class DeleteMeds extends AppCompatActivity {
 
         @Override
         protected ArrayList<String> doInBackground(Void... params) {
-
+            // HTTP POST Request, returns JSON String for parsing, JSON strings added to array in case of multiple deletions.
             try {
                 for(int i = 0; i < medsSelected.size(); i++) {
                     String oldTime = "";
@@ -271,8 +273,7 @@ public class DeleteMeds extends AppCompatActivity {
                         data[i] = lineFormat;
 
                     }
-                    mAdapter.setBpData(data);
-
+                    mAdapter.setBpData(data); // Setting data for recycler view
                 }
                 else {
                     String message = jsonOb.getString("message");

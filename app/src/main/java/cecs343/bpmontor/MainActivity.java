@@ -36,6 +36,7 @@ import java.net.URLEncoder;
 
 public class MainActivity extends AppCompatActivity {
 
+    // Used for session management
     private SessionManager sesh;
     private static int patientId;
     private boolean isDoc;

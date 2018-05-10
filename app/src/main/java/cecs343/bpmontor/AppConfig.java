@@ -4,6 +4,7 @@ package cecs343.bpmontor;
  * Created by Mat on 4/16/2018.
  */
 
+// This class holds global variables
 public class AppConfig {
     // Server user login/register url
     public static final String URL_LOGIN = "http://matcunningham.com/login.php";
@@ -37,5 +38,8 @@ public class AppConfig {
 
     // TIMEOUT FOR HTTP CONNECTION
     public static final int HTTP_TIME_OUT = 8000;
+
+    // SPLASH SCREEN TIMEOUT
+    public static final int TIME_OUT = 2500;
 
 }

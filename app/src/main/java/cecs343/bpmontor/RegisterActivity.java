@@ -26,17 +26,18 @@ import java.net.URLEncoder;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    // User Interface References
     private Button btnRegister;
     private Button btnLinkToLogin;
     private EditText inputName;
     private EditText inputEmail;
     private EditText inputPassword;
     private View mProgressView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
 
         inputName = (EditText) findViewById(R.id.fullname);
         inputEmail = (EditText) findViewById(R.id.email);

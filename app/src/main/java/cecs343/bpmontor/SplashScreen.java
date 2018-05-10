@@ -5,9 +5,8 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+// The timed title screen that is displayed when the app is opened.
 public class SplashScreen extends AppCompatActivity {
-
-    private static int TIME_OUT = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +21,6 @@ public class SplashScreen extends AppCompatActivity {
                 startActivity(i);
                 finish();
             }
-        }, TIME_OUT);
+        }, AppConfig.TIME_OUT);
     }
-
 }

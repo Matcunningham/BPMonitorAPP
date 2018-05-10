@@ -16,7 +16,7 @@
         android:layout_centerInParent="true"
         android:layout_toLeftOf="@+id/slash"
         android:textColor="@color/white"
-        android:hint="Systolic"
+        android:hint="@string/systolic"
         android:textColorHint="@color/colorAccent" />
 
     <TextView
@@ -38,7 +38,7 @@
         android:layout_toRightOf="@+id/slash"
         android:layout_centerInParent="true"
         android:textColor="@color/white"
-        android:hint="Diastolic"
+        android:hint="@string/diastolic"
         android:textColorHint="@color/colorAccent" />
 
     <Button
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:onClick="showTimePickerDialog"
         android:layout_marginBottom="8dp"
-        android:text="Select Time"
+        android:text="@string/select_time"
         android:background="@color/colorSecondaryAccent"
         android:textColor="@color/white"
         android:layout_above="@+id/record_bp_in_db"
@@ -69,7 +69,7 @@
         android:id="@+id/record_bp_in_db"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Record Entry NOW"
+        android:text="@string/record_entry_now"
         android:background="@color/colorAccent"
         android:textColor="@color/white"
         android:textSize="20sp"

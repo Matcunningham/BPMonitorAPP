@@ -30,6 +30,7 @@ import java.net.URLEncoder;
 
 public class ViewMedSchedule extends AppCompatActivity {
 
+    // Session managment and UI references
     private RecyclerView mRecyclerView;
     private BpRvAdapter mAdapter;
     private SessionManager sesh;
@@ -44,10 +45,10 @@ public class ViewMedSchedule extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_med_schedule);
         sesh = new SessionManager(getApplicationContext());
-        sesh.checkLogin();
-        patientId = sesh.getPid();
-        isDoc = sesh.getIsDoc();
-        if(isDoc)
+        sesh.checkLogin(); // Redirects to login page if not logged in
+        patientId = sesh.getPid(); // Gets patient ID
+        isDoc = sesh.getIsDoc(); // Sets boolean
+        if(isDoc) // If doctor get the current selected patient
         {
             selectedPatient = sesh.getCurrentPat();
             currPatientName = sesh.getCurrentPatName();
@@ -62,6 +63,7 @@ public class ViewMedSchedule extends AppCompatActivity {
         mAdapter = new BpRvAdapter(R.layout.bp_list_item);
         mRecyclerView.setAdapter(mAdapter);
 
+        // Setting progress spinner to visible
         mRecyclerView.setVisibility(View.INVISIBLE);
         mProgressView.setVisibility(View.VISIBLE);
         if(isDoc)
@@ -74,6 +76,7 @@ public class ViewMedSchedule extends AppCompatActivity {
         }
     }
 
+    // For upward navigation, returns back to parent activity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -85,6 +88,7 @@ public class ViewMedSchedule extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // Asynchronous task to retrive medication schedule
     public class MedSchedQueryTask extends AsyncTask<Void, Void, String> {
 
         private final int id;
@@ -96,6 +100,7 @@ public class ViewMedSchedule extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... voids) {
+            // HTTP POST Request, returns JSON String for parsing.
             try {
                 URL url = new URL(AppConfig.URL_MEDSCHED);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -110,6 +115,7 @@ public class ViewMedSchedule extends AppCompatActivity {
                 bfWriter.close();
                 outStream.close();
 
+                // Getting JSON
                 InputStream inStream = httpURLConnection.getInputStream();
                 BufferedReader bfReader = new BufferedReader(new InputStreamReader(inStream, "iso-8859-1"));
                 String result = "";
@@ -127,21 +133,22 @@ public class ViewMedSchedule extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return "Error";
         }
 
         @Override
         protected void onPostExecute(final String result) {
+            // Removes progress spinner and replaces with recycler view
             mProgressView.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.VISIBLE);
             try {
+                // Parsing json
                 JSONObject jsonOb = new JSONObject(result);
                 boolean status = jsonOb.getBoolean(AppConfig.SUCCESS);
                 if(status)
                 {
                     JSONArray json = jsonOb.getJSONArray("data");
-                    String[] data = new String[json.length()];
+                    String[] data = new String[json.length()]; // Holds each row of medication
                     for(int i = 0; i < json.length(); i++)
                     {
                         JSONObject row = json.getJSONObject(i);
@@ -153,7 +160,7 @@ public class ViewMedSchedule extends AppCompatActivity {
                         data[i] = lineFormat;
 
                     }
-                    mAdapter.setBpData(data);
+                    mAdapter.setBpData(data); // Setting list item for recycler view row
 
                 }
                 else {

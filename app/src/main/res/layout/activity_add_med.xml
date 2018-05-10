@@ -7,21 +7,12 @@
     tools:context="cecs343.bpmontor.AddMed"
     android:background="@color/colorPrimaryDark">
 
-    <!--<TextView             TITLE if wanted-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="#07000000"-->
-        <!--android:text="Add Medication"-->
-        <!--android:textSize="35sp"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:gravity="center_horizontal"/>-->
-
     <EditText
         android:id="@+id/etnew_med"
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:layout_marginTop="84dp"
-        android:hint="New Medicine Name"
+        android:hint="@string/new_medicine_name"
         android:textColorHint="@color/colorAccent"
         android:inputType="textCapCharacters"
         android:textColor="@color/white"
@@ -36,7 +27,7 @@
         android:layout_marginBottom="68dp"
         android:layout_marginStart="8dp"
         android:onClick="showTimePickerDialog"
-        android:text="Select Time"
+        android:text="@string/select_time"
         android:background="@color/colorSecondaryAccent"
         android:textColor="@color/white"
         android:textSize="20sp"
@@ -53,7 +44,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="ADD NOW"
+        android:text="@string/add_now"
         android:background="@color/colorAccent"
         android:textColor="@color/white"
         android:textSize="20sp"

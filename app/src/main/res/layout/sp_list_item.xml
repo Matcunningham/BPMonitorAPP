@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/sp_listitem"
             android:textColor="@color/white"
-            android:textSize="28dp"
+            android:textSize="28sp"
             android:padding="5dp"/>
 
         <RadioButton
@@ -27,6 +27,5 @@
             android:background="@color/white"/>
 
     </RelativeLayout>
-
 
 </FrameLayout>

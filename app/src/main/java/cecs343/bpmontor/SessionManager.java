@@ -34,7 +34,6 @@ public class SessionManager {
     // Editor for Shared preferences
     static Editor editor;
 
-    // Context
     Context _context;
 
     // Shared pref mode
@@ -46,18 +45,14 @@ public class SessionManager {
     // All Shared Preferences Keys
     private static final String IS_LOGIN = "IsLoggedIn";
 
-    // User id (make variable public to access from outside)
-    public static final String KEY_PID = "pid";
+    private static final String KEY_PID = "pid";
 
-    // Email address (make variable public to access from outside)
-    public static final String KEY_EMAIL = "email";
-
-    public static final String CURR_PAT = "CurrentPatient";
-    public static final String CURR_PAT_NAME = "CurrentPatientName";
+    private static final String CURR_PAT = "CurrentPatient";
+    private static final String CURR_PAT_NAME = "CurrentPatientName";
 
 
-    public static final String IS_DOC = "isDoctor";
-    public static boolean isDoc;
+    static final String IS_DOC = "isDoctor";
+    static boolean isDoc;
 
     // Constructor
     public SessionManager(Context context){
@@ -66,16 +61,13 @@ public class SessionManager {
         editor = pref.edit();
     }
 
-
     public void createLoginSession(int pid){
-        // Storing login value as TRUE
+        // Storing login value
         editor.putBoolean(IS_LOGIN, true);
 
         // Storing id in pref
         editor.putInt(KEY_PID, pid);
 
-
-        // commit changes
         editor.commit();
     }
 
@@ -108,13 +100,12 @@ public class SessionManager {
     public void checkLogin(){
         // Check login status
         if(!this.isLoggedIn()){
-            // user is not logged in redirect him to Login Activity
+
             Intent i = new Intent(_context, LoginActivity.class);
+
             // Closing all the Activities
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            // Add new Flag to start new Activity
-            //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             // Staring Login Activity
             _context.startActivity(i);
@@ -124,7 +115,6 @@ public class SessionManager {
 
 
     public int getPid(){
-
         // user ID
         int pid = pref.getInt(KEY_PID, 0);
         return pid;
@@ -136,9 +126,8 @@ public class SessionManager {
         return doc;
     }
 
-    /**
-     * Clear session details
-     * */
+
+    //Clear session details
     public void logoutUser(){
         // Clearing all data from Shared Preferences
         editor.clear();
@@ -146,23 +135,17 @@ public class SessionManager {
 
         // After logout redirect user to Login Activity
         Intent i = new Intent(_context, LoginActivity.class);
+
         // Closing all the Activities
-        //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-        // Add new Flag to start new Activity
-        //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
 
         // Staring Login Activity
         _context.startActivity(i);
 
     }
 
-    /**
-     * Quick check for login
-     * **/
+
+    //Quick check for login
     // Get Login State
     public boolean isLoggedIn(){
         return pref.getBoolean(IS_LOGIN, false);
@@ -227,8 +210,6 @@ public class SessionManager {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
     }
-
 }

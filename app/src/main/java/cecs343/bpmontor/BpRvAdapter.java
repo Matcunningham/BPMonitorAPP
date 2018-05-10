@@ -13,6 +13,7 @@ import android.widget.TextView;
  * Created by Mat on 4/19/2018.
  */
 
+// Adapter class for displaying list items in the recycler view
 public class BpRvAdapter extends RecyclerView.Adapter<BpRvAdapter.ItemViewHolder> {
     private String[] dataSet;
     private int listItem;
@@ -32,7 +33,7 @@ public class BpRvAdapter extends RecyclerView.Adapter<BpRvAdapter.ItemViewHolder
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType){
         Context context = viewGroup.getContext();
-        int layoutIdforListItem = listItem; //R.layout.bp_list_item;
+        int layoutIdforListItem = listItem;
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View view = inflater.inflate(layoutIdforListItem, viewGroup, false);

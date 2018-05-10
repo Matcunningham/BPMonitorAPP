@@ -20,5 +20,4 @@ public abstract class AsyncTask<Params, Progress, Result> {
         onPostExecute(result);
         return this;
     }
-
 }

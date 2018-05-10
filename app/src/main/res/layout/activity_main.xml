@@ -11,9 +11,9 @@
         android:id="@+id/patienttitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_margin="10dp"
         android:gravity="center"
-        android:text="Patient"
+        android:text="@string/hello_patient"
         android:textAllCaps="true"
         android:textSize="20sp" />
 
@@ -64,7 +64,7 @@
                 android:background="@color/blueGray2"
                 android:layout_margin="5dp"
                 android:textSize="20sp"
-                android:text="Update Med Schedule" />
+                android:text="@string/update_med_schedule" />
 
             <Button
                 android:id="@+id/record_bp"
@@ -99,7 +99,7 @@
         android:textSize="20sp"
         android:layout_margin="5dp"
         android:background="@color/colorAccent"
-        android:text="Add/Update Doctor" />
+        android:text="@string/add_update_doctor" />
 
     <Button
         android:id="@+id/logout"
@@ -107,7 +107,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/colorAccent"
-        android:text="LOGOUT"
+        android:text="@string/logout"
         android:layout_margin="5dp"
         android:textSize="20sp" />
 

@@ -1,12 +1,5 @@
 package cecs343.bpmontor;
-
-import org.json.JSONException;
 import org.junit.Test;
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-
 import static org.junit.Assert.*;
 
 /**
@@ -16,9 +9,8 @@ public class UserLoginTaskTest extends LoginActivity {
 
     String message;
 
-    // Test for invalid login
-    @Test
-    public void testInvalid() throws ExecutionException, InterruptedException, JSONException {
+    @Test // Test for invalid login
+    public void testInvalid(){
         final UserLoginTask userLoginTask = new UserLoginTask("abc@yahoo.com", "abc"){
             String result;
 
@@ -41,9 +33,8 @@ public class UserLoginTaskTest extends LoginActivity {
 
     }
 
-    // Test for valid login
-    @Test
-    public void testValid() throws ExecutionException, InterruptedException, JSONException {
+    @Test // Test for valid login
+    public void testValid() {
         final UserLoginTask userLoginTask = new UserLoginTask("abc@yahoo.com", "abcd"){
             String result;
 
@@ -58,11 +49,9 @@ public class UserLoginTaskTest extends LoginActivity {
             }
         };
 
-
         message = userLoginTask.execute().toString();
 
         String expected = "{\"error\":false,\"pid\":1,\"email\":\"abc@yahoo.com\"}"; // Expected JSON String
         assertEquals(expected, message);
-
     }
 }

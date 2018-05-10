@@ -11,6 +11,6 @@
         android:padding="5dp"
         style="@style/TextAppearance.AppCompat.Title"
         android:textColor="@color/white"
-        android:textSize="28dp" />
+        android:textSize="28sp" />
 
 </FrameLayout>

@@ -194,5 +194,4 @@ public class SelectPatient extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Time Out... TRY AGAIN", Toast.LENGTH_LONG).show();
         }
     }
-
 }

@@ -41,8 +41,8 @@ public class ViewBPHistory extends AppCompatActivity {
     private boolean isDoc;
     private int selectedPatient;
     private View mProgressView;
-    private Button retry;
-    private TextView heading;
+    private Button retry; // Only used when http request times out
+    private TextView heading; // Label for data
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +98,7 @@ public class ViewBPHistory extends AppCompatActivity {
         });
     }
 
+    // Returns to parent activity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -121,6 +122,7 @@ public class ViewBPHistory extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... voids) {
             try {
+                // HTTP POST Request, returns JSON String for parsing.
                 URL url = new URL(AppConfig.URL_BPHIST);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
@@ -187,7 +189,7 @@ public class ViewBPHistory extends AppCompatActivity {
                         data[i] = lineFormat;
 
                     }
-                    mAdapter.setBpData(data);
+                    mAdapter.setBpData(data); // Sets row value for recycler view
 
                 }
                 else {
@@ -202,7 +204,7 @@ public class ViewBPHistory extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             mProgressView.setVisibility(View.GONE);
-            retry.setVisibility(View.VISIBLE);
+            retry.setVisibility(View.VISIBLE); // Displays retry button
             Toast.makeText(getApplicationContext(), "Time Out... TRY AGAIN", Toast.LENGTH_LONG).show();
         }
     }

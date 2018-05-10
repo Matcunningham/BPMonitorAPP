@@ -49,7 +49,7 @@ public class UpdateSchedule extends AppCompatActivity {
     private boolean isDoc;
     private int patientId;
     private static String newTime;
-    public List<String> medsSelected = new ArrayList<>();
+    public List<String> medsSelected = new ArrayList<>(); // Holds checked medications
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +76,7 @@ public class UpdateSchedule extends AppCompatActivity {
         mRecyclerView.setLayoutManager(layoutManager);
 
         mAdapter = new MedChBoxRvAdapter(R.layout.medcheckbox_list_item ,new MedChBoxRvAdapter.OnItemCheckListener() {
+            // Overrides interface methods, adds/removes checked medication to array list to be updated
             @Override
             public void onItemCheck(String med) {
                 medsSelected.add(med);
@@ -127,6 +128,7 @@ public class UpdateSchedule extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // Displays time picker on button click
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         FragmentManager fragMan = getFragmentManager();
@@ -138,16 +140,17 @@ public class UpdateSchedule extends AppCompatActivity {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current time as the default values for the picker
+            // Use the current time as the default for the time picker
             final Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
 
-            // Create a new instance of TimePickerDialog and return it
+            // Creates a new instance of TimePickerDialog and returns it
             return new TimePickerDialog(getActivity(), TimePickerDialog.THEME_HOLO_DARK, this, hour, minute,
                     DateFormat.is24HourFormat(getActivity()));
         }
 
+        // Transforms the time into a string readable by mySQL
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             if(hourOfDay < 5 && hourOfDay > 0)
             {
@@ -181,9 +184,10 @@ public class UpdateSchedule extends AppCompatActivity {
 
         @Override
         protected ArrayList<String> doInBackground(Void... params) {
-
             try {
+                // HTTP POST Request, returns JSON String for parsing, JSON strings added to array in case of multiple updates.
                 for(int i = 0; i < medsSelected.size(); i++) {
+                    // Parsing strings of selected meds to get the name and time
                     String oldTime = "";
                     String med = "";
                     StringTokenizer st = new StringTokenizer(medsSelected.get(i), "\t\t\t");
